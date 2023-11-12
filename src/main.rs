@@ -27,19 +27,20 @@
     clippy::todo,
     //clippy::all  //for extra anger
 )]
+
 // access to file system, threads, and time
-use std::{fs::File, path::Path};
+use std::path::Path;
 
 // rodio is our audio player
-use rodio::{Decoder, OutputStream, Sink};
+use rodio::{OutputStream, Sink};
 
 // tui-rs is our terminal interface
 // use tui::*;
 
-//debug only printing
-macro_rules! debug_println {
-    ($($arg:tt)*) => (if ::std::cfg!(debug_assertions) { ::std::println!($($arg)*); })
-}
+use dub_dump::audio_functions::play_audio_file;
+use dub_dump::helper_functions::graceful_shutdown;
+use dub_dump::debug_println;
+
 
 fn main() {
     // create our audio sink
@@ -74,41 +75,4 @@ fn main() {
     debug_println!("sound has finished playing.");
     sink.stop();
     graceful_shutdown("done!", 0)
-}
-
-fn graceful_shutdown(message: &str, code: i32) -> ! {
-    println!("Shutting down: {message}");
-    std::process::exit(code);
-}
-
-#[derive(Debug)]
-enum FilePlayError {
-    Unknown(String)
-}
-
-fn play_audio_file(file_path: &Path, sink: &Sink) -> Result<(), FilePlayError> {
-    debug_println!("attempting to play: {:#?}...", file_path.to_str());
-    
-    // Open the file
-    let sound:File = match File::open(file_path) {
-        Ok(ok) => ok,
-        Err(err) => return Err(FilePlayError::Unknown(err.to_string())),
-    };
-
-    debug_println!("File opened...");
-    
-    // Decode the sound
-    let decoder = match Decoder::new(sound){
-        Ok(ok) => ok,
-        Err(err) => return Err(FilePlayError::Unknown(err.to_string())),
-    };
-
-    debug_println!("Sound decoded...");
-
-    //play
-    sink.append(decoder);
-
-    debug_println!("Sound playing!");
-
-    Ok(())
 }

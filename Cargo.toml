@@ -6,5 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+colored = "2.0.4"
+crossterm = "0.27.0"
 rodio = "0.17.3"
-tui = "0.19.0"

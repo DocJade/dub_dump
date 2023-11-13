@@ -1,13 +1,13 @@
 // TODO
-// Playing audio files
-// Progress bar for total progress
-// Progress bar for currently playing audio
-// Timeline based on clip length
-// Volume control
-// Speed controls
+// listen for keypresses
 // Pause
 // Play
 // Delete
+// Volume control
+// Speed controls
+// Timeline based on clip length
+// Progress bar for currently playing audio
+// Progress bar for total progress
 
 // Make Clippy angry
 #![warn(
@@ -34,10 +34,7 @@ use std::path::Path;
 // rodio is our audio player
 // use rodio::Sink;
 
-// tui-rs is our terminal interface
-// use tui::*;
-
-//public debug 
+//public debug
 #[macro_export]
 macro_rules! debug_println {
     ($($arg:tt)*) => (if ::std::cfg!(debug_assertions) { ::std::println!($($arg)*); })
@@ -45,26 +42,32 @@ macro_rules! debug_println {
 
 pub mod audio_functions;
 pub mod helper_functions;
-use crate::helper_functions::graceful_shutdown::graceful_shutdown;
-use crate::audio_functions::play_audio_file::play_audio_file;
+pub mod terminal_functions;
 use crate::audio_functions::create_sink::{create_sink, PackagedSink};
+use crate::audio_functions::play_audio_file::play_audio_file;
+use crate::helper_functions::graceful_shutdown::graceful_shutdown;
+use crate::terminal_functions::set_size::set_size;
 
 fn main() {
+    // check terminal size
+    match set_size() {
+        Ok(_) => {},
+        Err(err) => graceful_shutdown(
+            format!("[main] : error with terminal sizing: {err:#?}").as_str(),
+            1,
+        ),
+    };
+
     // create our audio sink
     let mut packed: PackagedSink = match create_sink() {
         Ok(ok) => ok,
-        Err(err) => graceful_shutdown(format!("[main] : error the audio sink and stream: {err:#?}").as_str(), 1),
+        Err(err) => graceful_shutdown(
+            format!("[main] : error the audio sink and stream: {err:#?}").as_str(),
+            1,
+        ),
     };
 
-    // play a sound
-    match play_audio_file(Path::new("test.wav"), &mut packed) {
-        Ok(_) => {}, // swag, move on.
-        Err(err) => graceful_shutdown(format!("[main] : error playing sound: {err:#?}").as_str(), 1)
-    }
+    // now we shall enter the input waiting loop
 
-    // close program when sound is done
-    debug_println!("[main] : waiting for sound to finish playing...");
-    packed.sink.sleep_until_end();
-    debug_println!("[main] : sound has finished playing.");
     graceful_shutdown("[main] : done!", 0)
 }

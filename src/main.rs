@@ -32,47 +32,39 @@
 use std::path::Path;
 
 // rodio is our audio player
-use rodio::{OutputStream, Sink};
+// use rodio::Sink;
 
 // tui-rs is our terminal interface
 // use tui::*;
 
-use dub_dump::audio_functions::play_audio_file;
-use dub_dump::helper_functions::graceful_shutdown;
-use dub_dump::debug_println;
+//public debug 
+#[macro_export]
+macro_rules! debug_println {
+    ($($arg:tt)*) => (if ::std::cfg!(debug_assertions) { ::std::println!($($arg)*); })
+}
 
+pub mod audio_functions;
+pub mod helper_functions;
+use crate::helper_functions::graceful_shutdown::graceful_shutdown;
+use crate::audio_functions::play_audio_file::play_audio_file;
+use crate::audio_functions::create_sink::{create_sink, PackagedSink};
 
 fn main() {
     // create our audio sink
-
-    // First the stream
-    let (_stream, stream_handle) = match OutputStream::try_default(){
-        Ok(ok) => ok, // sweet!
-        Err(err) => graceful_shutdown(format!("error creating stream: {err:#?}").as_str(), 1), // uh oh
+    let mut packed: PackagedSink = match create_sink() {
+        Ok(ok) => ok,
+        Err(err) => graceful_shutdown(format!("[main] : error the audio sink and stream: {err:#?}").as_str(), 1),
     };
 
-    debug_println!("Stream created...");
-
-    // Then let that sink in
-    let sink: Sink = match Sink::try_new(&stream_handle){
-        Ok(ok) => ok, // sweet!
-        Err(err) => graceful_shutdown(format!("error creating sink: {err:#?}").as_str(), 1), // uh oh
-    };
-
-    debug_println!("Sink done!");
-    
     // play a sound
-    let play_result = play_audio_file(Path::new("test.wav"), &sink);
-    match play_result {
+    match play_audio_file(Path::new("test.wav"), &mut packed) {
         Ok(_) => {}, // swag, move on.
-        Err(err) => graceful_shutdown(format!("error playing sound: {err:#?}").as_str(), 1)
+        Err(err) => graceful_shutdown(format!("[main] : error playing sound: {err:#?}").as_str(), 1)
     }
 
     // close program when sound is done
-
-    debug_println!("waiting for sound to finish playing...");
-    sink.sleep_until_end();
-    debug_println!("sound has finished playing.");
-    sink.stop();
-    graceful_shutdown("done!", 0)
+    debug_println!("[main] : waiting for sound to finish playing...");
+    packed.sink.sleep_until_end();
+    debug_println!("[main] : sound has finished playing.");
+    graceful_shutdown("[main] : done!", 0)
 }

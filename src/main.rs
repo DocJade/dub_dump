@@ -1,5 +1,5 @@
 // TODO in descending order of priority
-// keep checking for window size.
+// disable terminal scrolling
 // listen for keypresses
 // Pause
 // Play
@@ -53,15 +53,6 @@ use crate::helper_functions::graceful_shutdown::graceful_shutdown;
 use crate::terminal_functions::set_size::set_size;
 
 fn main() {
-    // check terminal size
-    match set_size() {
-        Ok(_) => {},
-        Err(err) => graceful_shutdown(
-            format!("[main] : error with terminal sizing: {err:#?}").as_str(),
-            1,
-        ),
-    };
-
     // create our audio sink
     let mut packed: PackagedSink = match create_sink() {
         Ok(ok) => ok,
@@ -71,7 +62,17 @@ fn main() {
         ),
     };
 
-    // now we shall enter the input waiting loop
+    // now we shall enter the main loop
+    loop {
+            // check terminal size
+    match set_size() {
+        Ok(_) => {},
+        Err(err) => graceful_shutdown(
+            format!("[main] : error with terminal sizing: {err:#?}").as_str(),
+            1,
+        ),
+    };
+    }
 
     graceful_shutdown("[main] : done!", 0)
 }

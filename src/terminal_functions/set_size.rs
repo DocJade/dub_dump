@@ -10,6 +10,7 @@ const DESIRED_SIZE: TSize = TSize { x: 80, y: 30 };
 
 use crossterm::{terminal::Clear, ExecutableCommand};
 use std::io::{self};
+use std::{thread, time};
 
 use super::draw_text::DrawError;
 
@@ -42,14 +43,44 @@ pub fn set_size() -> Result<(), TerminalSizeError> {
             continue;
         }
 
-        // new size! update the old one
-        last_size = size.clone();
-
         if size == DESIRED_SIZE {
-            // terminal is the correct size, we are done here.
+            // terminal is the correct size.
+            // exit early?
+            if last_size == (TSize { x: 0, y: 0 }) {
+                // early exit.
+                return Ok(());
+            }
+
+            // print good message, then pause for a second, then continue
+            // clear
+            match io::stdout().execute(Clear(ClearType::All)) {
+                Ok(_) => {}
+                Err(err) => return Err(TerminalSizeError::Unknown(err.to_string())),
+            };
+            let printer: PrintableText = PrintableText {
+                text_color: colored::Color::BrightGreen,
+                message: "Good!\n".to_string(),
+                pos_x: 0,
+                pos_y: 0,
+            };
+            // finally, print it.
+            match draw_text(&printer) {
+                Ok(_) => {}
+                Err(err) => return Err(TerminalSizeError::DrawError(err)),
+            };
+            thread::sleep(time::Duration::from_secs(1));
+
+            // final clear
+            match io::stdout().execute(Clear(ClearType::All)) {
+                Ok(_) => {}
+                Err(err) => return Err(TerminalSizeError::Unknown(err.to_string())),
+            };
+
             return Ok(());
         }
         // not the right size
+        // new size! update the old one
+        last_size = size.clone();
 
         // clear terminal and print resize message.
         match io::stdout().execute(Clear(ClearType::All)) {

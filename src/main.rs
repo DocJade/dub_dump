@@ -1,13 +1,17 @@
-// TODO
+// TODO in descending order of priority
+// keep checking for window size.
 // listen for keypresses
 // Pause
 // Play
 // Delete
 // Volume control
 // Speed controls
-// Timeline based on clip length
+// Copy all clips into a new folder upon startup (non destructive editing ftw)
 // Progress bar for currently playing audio
 // Progress bar for total progress
+// Timeline based on clip length
+// audio clip waveform (not animated)
+// logo shimmer
 
 // Make Clippy angry
 #![warn(

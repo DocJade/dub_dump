@@ -48,7 +48,7 @@ pub fn eval_keypress(packed: &PackagedSink) {
                     } => {
                         //quit
                         debug_println!("[eval_keypress] : up pressed, increasing volume.");
-                        volume_up(&packed);
+                        volume_up(packed);
                     }
 
                     // volume down (down key)
@@ -60,7 +60,7 @@ pub fn eval_keypress(packed: &PackagedSink) {
                     } => {
                         //quit
                         debug_println!("[eval_keypress] : down pressed, decreasing volume.");
-                        volume_down(&packed);
+                        volume_down(packed);
                     }
 
                     // speed up (right key)
@@ -72,7 +72,7 @@ pub fn eval_keypress(packed: &PackagedSink) {
                     } => {
                         //quit
                         debug_println!("[eval_keypress] : right pressed, increasing speed.");
-                        speed_up(&packed);
+                        speed_up(packed);
                     }
 
                     // slow down (left key)
@@ -84,7 +84,7 @@ pub fn eval_keypress(packed: &PackagedSink) {
                     } => {
                         //quit
                         debug_println!("[eval_keypress] : left pressed, decreasing speed.");
-                        speed_down(&packed);
+                        speed_down(packed);
                     }
 
                     // reset speed (x)
@@ -96,7 +96,7 @@ pub fn eval_keypress(packed: &PackagedSink) {
                     } => {
                         //quit
                         debug_println!("[eval_keypress] : x pressed, resetting speed.");
-                        speed_reset(&packed);
+                        speed_reset(packed);
                     }
 
                     _ => { /*unimplemented */ }

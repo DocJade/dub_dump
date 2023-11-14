@@ -1,5 +1,4 @@
 /// This function will print a message, then exit the process.
-/// use crossterm::terminal;
 use crossterm::{terminal, ExecutableCommand};
 use std::io::{self};
 pub fn graceful_shutdown(message: &str, code: i32) -> ! {

@@ -12,6 +12,7 @@
 // Timeline based on clip length
 // audio clip waveform (not animated)
 // logo shimmer
+// fix window resize message not being displayed on app launch
 
 // Make Clippy angry
 #![warn(
@@ -33,7 +34,7 @@
 )]
 
 // access to file system, threads, and time
-use std::path::Path;
+// use std::path::Path;
 
 // rodio is our audio player
 // use rodio::Sink;
@@ -95,9 +96,5 @@ fn main() {
 
         // Check for input
         eval_keypress(&packed);
-        break
     }
-
-    // graceful shutdown
-    graceful_shutdown("all done here!", 0)
 }

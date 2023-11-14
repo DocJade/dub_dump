@@ -13,6 +13,7 @@
 // audio clip waveform (not animated)
 // logo shimmer
 // fix window resize message not being displayed on app launch
+// write tests
 
 // Make Clippy angry
 #![warn(
@@ -47,6 +48,7 @@ macro_rules! debug_println {
 
 pub mod audio_functions;
 pub mod control_functions;
+pub mod file_functions;
 pub mod helper_functions;
 pub mod terminal_functions;
 use crate::audio_functions::audio_controls::{
@@ -54,6 +56,7 @@ use crate::audio_functions::audio_controls::{
 };
 use crate::audio_functions::create_sink::{create_sink, PackagedSink};
 use crate::control_functions::eval_keypress::eval_keypress;
+use crate::file_functions::get_dir::get_dir;
 //use crate::audio_functions::play_audio_file::play_audio_file;
 use crate::helper_functions::graceful_shutdown::graceful_shutdown;
 use crate::terminal_functions::set_size::set_size;
@@ -96,5 +99,8 @@ fn main() {
 
         // Check for input
         eval_keypress(&packed);
+
+        println!("{}",get_dir());
+        graceful_shutdown("done", 0)
     }
 }

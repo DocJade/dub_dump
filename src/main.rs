@@ -59,9 +59,6 @@ use crate::terminal_functions::set_size::set_size;
 use crate::terminal_functions::terminal_setup::terminal_setup;
 
 fn main() {
-    // terminal cleanup on shutdown
-    let _clean_up = crate::terminal_functions::terminal_setup::CleanUp;
-
     // do terminal setup
 
     match terminal_setup() {
@@ -98,5 +95,9 @@ fn main() {
 
         // Check for input
         eval_keypress(&packed);
+        break
     }
+
+    // graceful shutdown
+    graceful_shutdown("all done here!", 0)
 }

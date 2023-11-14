@@ -37,7 +37,7 @@ pub fn eval_keypress(packed: &PackagedSink) {
                     } => {
                         //quit
                         debug_println!("[eval_keypress] : space pressed, replaying...");
-                        todo!("unimplemented");
+                        unimplemented!("unimplemented");
                     }
                     // volume up (up key)
                     KeyEvent {

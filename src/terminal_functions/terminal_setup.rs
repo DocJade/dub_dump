@@ -4,29 +4,6 @@ use crossterm::terminal;
 use crossterm::{cursor::DisableBlinking, cursor::Hide, terminal::Clear, ExecutableCommand};
 use std::io::{self};
 
-//shutdown cleanup
-pub struct CleanUp;
-impl Drop for CleanUp {
-    fn drop(&mut self) {
-        // disable raw mode
-        match terminal::disable_raw_mode() {
-            Ok(_) => {}
-            Err(err) => crate::helper_functions::graceful_shutdown::graceful_shutdown(
-                format!("[main] : Failed to enable raw terminal mode: {err:#?}").as_str(),
-                1,
-            ),
-        };
-        // exit the alternate terminal
-        match io::stdout().execute(terminal::LeaveAlternateScreen) {
-            Ok(_) => {}
-            Err(err) => crate::helper_functions::graceful_shutdown::graceful_shutdown(
-                format!("[main] : Failed to enable alt terminal mode: {err:#?}").as_str(),
-                1,
-            ),
-        };
-    }
-}
-
 #[derive(Debug)]
 pub enum TerminalInitialSetupError {
     Unknown(String),

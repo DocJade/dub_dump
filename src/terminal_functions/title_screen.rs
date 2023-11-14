@@ -30,6 +30,16 @@
 //25  -------------------------------------------------------------------------------- // divider
 //26  ################################################################################ // timeline view, shows relative clip lengths to eachother, current clip in middle
 //27  -------------------------------------------------------------------------------- // divider
-//28  ------reserved-to-show-controls------------------------------------------------- // volume / speed?
-//29  ------reserved-to-show-controls----------------------------------------[DocJade] //keybinds
+//28  space: replay     s: skip     d: dump     x: reset speed     ^c: exit            // volume / speed?
+//29  up/down: volume     left/right: speed                                  [DocJade] // keybinds
 
+// keybinds
+
+// space: again (play sound again from beginning)
+// s: skip / save
+// d: dump / discard (deletes the copy)
+// up: vol up
+// down: vol down
+// right: speed up
+// left: slow down
+// x: reset speed.

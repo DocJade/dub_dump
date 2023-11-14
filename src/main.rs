@@ -1,6 +1,7 @@
 // TODO in descending order of priority
 // Pause
 // Play
+// make playing when file is over restart the file
 // Delete
 // Volume control
 // Speed controls
@@ -37,10 +38,8 @@ use std::path::Path;
 // rodio is our audio player
 // use rodio::Sink;
 
-// terminal related
-use crossterm::event;
-use crossterm::event::{Event, KeyCode, KeyEvent};
-use std::time::Duration;
+
+
 
 //public debug
 #[macro_export]
@@ -51,6 +50,9 @@ macro_rules! debug_println {
 pub mod audio_functions;
 pub mod helper_functions;
 pub mod terminal_functions;
+pub mod control_functions;
+use crate::control_functions::eval_keypress::eval_keypress;
+use crate::audio_functions::audio_controls::{volume_up, volume_down, speed_up, speed_down, speed_reset};
 use crate::audio_functions::create_sink::{create_sink, PackagedSink};
 //use crate::audio_functions::play_audio_file::play_audio_file;
 use crate::helper_functions::graceful_shutdown::graceful_shutdown;
@@ -74,7 +76,7 @@ fn main() {
     }
 
     // create our audio sink
-    let mut packed: PackagedSink = match create_sink() {
+    let packed: PackagedSink = match create_sink() {
         Ok(ok) => ok,
         Err(err) => graceful_shutdown(
             format!("[main] : error the audio sink and stream: {err:#?}").as_str(),
@@ -96,36 +98,6 @@ fn main() {
         };
 
         // Check for input
-        // poll for input for 1 144hz frame
-        match event::poll(Duration::from_millis(7)) {
-            Ok(true) => {
-                if let Ok(Event::Key(event)) = event::read() {
-                    match event {
-                        // check against keybinds
-
-                        // quit app (^c)
-                        KeyEvent {
-                            code: KeyCode::Char('c'),
-                            modifiers: event::KeyModifiers::CONTROL,
-                            kind: event::KeyEventKind::Press,
-                            state: event::KeyEventState::NONE,
-                        } => {
-                            //quit
-                            break;
-                        }
-
-                        _ => {/*unimplemented */}
-                    }
-                    debug_println!("[main : keypress : {:?},{:?}\r", event.code, event.kind);
-                }
-            }
-            Ok(false) => {}
-            Err(err) => graceful_shutdown(
-                format!("[main] : error with terminal sizing: {err:#?}").as_str(),
-                1,
-            ),
-        }
+        eval_keypress(&packed);
     }
-
-    graceful_shutdown("[main] : done!", 0)
 }

@@ -3,11 +3,11 @@ use crossterm::event;
 use crossterm::event::{Event, KeyCode, KeyEvent};
 
 //time
-use std::time::Duration;
 use crate::audio_functions::create_sink::PackagedSink;
-use crate::{volume_up, volume_down};
-use crate::{speed_up, speed_down, speed_reset};
 use crate::graceful_shutdown;
+use crate::{speed_down, speed_reset, speed_up};
+use crate::{volume_down, volume_up};
+use std::time::Duration;
 
 pub fn eval_keypress(packed: &PackagedSink) {
     // poll for input for 1 144hz frame
@@ -27,7 +27,7 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         //quit
                         debug_println!("[eval_keypress] : ^c pressed, shutting down.");
                         graceful_shutdown("[eval_keypress] : done!", 0);
-                    },
+                    }
                     // replay (space)
                     KeyEvent {
                         code: KeyCode::Char(' '),
@@ -49,7 +49,7 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         //quit
                         debug_println!("[eval_keypress] : up pressed, increasing volume.");
                         volume_up(&packed);
-                    },
+                    }
 
                     // volume down (down key)
                     KeyEvent {
@@ -61,7 +61,7 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         //quit
                         debug_println!("[eval_keypress] : down pressed, decreasing volume.");
                         volume_down(&packed);
-                    },
+                    }
 
                     // speed up (right key)
                     KeyEvent {
@@ -73,7 +73,7 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         //quit
                         debug_println!("[eval_keypress] : right pressed, increasing speed.");
                         speed_up(&packed);
-                    },
+                    }
 
                     // slow down (left key)
                     KeyEvent {
@@ -85,7 +85,7 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         //quit
                         debug_println!("[eval_keypress] : left pressed, decreasing speed.");
                         speed_down(&packed);
-                    },
+                    }
 
                     // reset speed (x)
                     KeyEvent {
@@ -99,12 +99,12 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         speed_reset(&packed);
                     }
 
-                    _ => {/*unimplemented */}
+                    _ => { /*unimplemented */ }
                 }
                 //debug_println!("[main] : keypress : {:?},{:?}\r", event.code, event.kind);
             }
         }
-        Ok(false) => {/* no pressed keys */}
+        Ok(false) => { /* no pressed keys */ }
         Err(err) => graceful_shutdown(
             format!("[eval_keypress] : error with reading keypress: {err:#?}").as_str(),
             1,

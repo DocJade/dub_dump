@@ -68,7 +68,7 @@ pub fn set_size() -> Result<(), TerminalSizeError> {
                 Ok(_) => {}
                 Err(err) => return Err(TerminalSizeError::DrawError(err)),
             };
-            thread::sleep(time::Duration::from_secs(1));
+            thread::sleep(time::Duration::from_millis(250));
 
             // final clear
             match io::stdout().execute(Clear(ClearType::All)) {

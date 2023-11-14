@@ -16,7 +16,7 @@ pub enum FilePlayError {
 /// # Errors
 ///
 /// * `FilePlayError::Unknown`: New error that is not in the `FilePlayError` enum yet.
-/// 
+///
 /// # Panics
 /// will panic if we see a new kind of file error
 pub fn play_audio_file(file_path: &Path, packed: &mut PackagedSink) -> Result<(), FilePlayError> {
@@ -29,8 +29,13 @@ pub fn play_audio_file(file_path: &Path, packed: &mut PackagedSink) -> Result<()
     let sound: File = match File::open(file_path) {
         Ok(ok) => ok,
         Err(err) => match err {
-            _ if err.to_string().contains("The system cannot find the file specified. (os error 2)") => return Err(FilePlayError::CannotFindFile),
-            _ => panic!("Uncaught file related error!")
+            _ if err
+                .to_string()
+                .contains("The system cannot find the file specified. (os error 2)") =>
+            {
+                return Err(FilePlayError::CannotFindFile)
+            }
+            _ => panic!("Uncaught file related error!"),
         },
     };
 

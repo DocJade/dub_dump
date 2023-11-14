@@ -4,8 +4,6 @@ use crossterm::terminal;
 use crossterm::{cursor::DisableBlinking, cursor::Hide, terminal::Clear, ExecutableCommand};
 use std::io::{self};
 
-
-
 //shutdown cleanup
 pub struct CleanUp;
 impl Drop for CleanUp {
@@ -26,16 +24,13 @@ impl Drop for CleanUp {
                 1,
             ),
         };
-
     }
 }
-
 
 #[derive(Debug)]
 pub enum TerminalInitialSetupError {
     Unknown(String),
 }
-
 
 /// Set up the terminal
 ///

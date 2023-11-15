@@ -51,11 +51,13 @@ pub mod control_functions;
 pub mod file_functions;
 pub mod helper_functions;
 pub mod terminal_functions;
+use file_functions::copy_audio::copy_audio;
+
 use crate::audio_functions::audio_controls::{
     speed_down, speed_reset, speed_up, volume_down, volume_up,
 };
 use crate::audio_functions::create_sink::{create_sink, PackagedSink};
-use crate::control_functions::eval_keypress::eval_keypress;
+//use crate::control_functions::eval_keypress::eval_keypress;
 use crate::file_functions::get_dir::get_dir;
 //use crate::audio_functions::play_audio_file::play_audio_file;
 use crate::helper_functions::graceful_shutdown::graceful_shutdown;
@@ -84,6 +86,12 @@ fn main() {
         ),
     };
 
+    // now we need to get our directory and copy the audio files to a new folder
+    let master_dir: String = get_dir();
+    let child_dir: String = copy_audio(master_dir);
+
+    // then make a list of all audio files
+
     // now we shall enter the main loop
 
     loop {
@@ -97,10 +105,7 @@ fn main() {
             ),
         };
 
-        // Check for input
-        eval_keypress(&packed);
-
-        println!("{}",get_dir());
+        println!("{child_dir}");
         graceful_shutdown("done", 0)
     }
 }

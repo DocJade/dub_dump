@@ -14,6 +14,7 @@
 // logo shimmer
 // fix window resize message not being displayed on app launch
 // write tests
+// check for preexisting files when doing file check
 
 // Make Clippy angry
 #![warn(
@@ -52,6 +53,7 @@ pub mod file_functions;
 pub mod helper_functions;
 pub mod terminal_functions;
 use file_functions::copy_audio::copy_audio;
+use file_functions::get_file_list::get_file_list;
 
 use crate::audio_functions::audio_controls::{
     speed_down, speed_reset, speed_up, volume_down, volume_up,
@@ -91,6 +93,10 @@ fn main() {
     let child_dir: String = copy_audio(master_dir);
 
     // then make a list of all audio files
+    let mut file_list: Vec<String> = get_file_list(child_dir);
+
+    // now we need to sort them
+    
 
     // now we shall enter the main loop
 
@@ -104,8 +110,9 @@ fn main() {
                 1,
             ),
         };
-
-        println!("{child_dir}");
+        file_list.sort_by();
+        println!("{:#?}",file_list);
+        panic!("this is on purpose not a real panic");
         graceful_shutdown("done", 0)
     }
 }

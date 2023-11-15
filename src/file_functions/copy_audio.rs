@@ -26,12 +26,17 @@ pub fn copy_audio(master: String) -> String {
     );
 
     // into string
-    let up_path: String = parent_path.to_str().map_or_else(|| graceful_shutdown(
-            "[copy_audio] : could not cast path to string!"
-                .to_string()
-                .as_str(),
-            1,
-        ), std::string::ToString::to_string);
+    let up_path: String = parent_path.to_str().map_or_else(
+        || {
+            graceful_shutdown(
+                "[copy_audio] : could not cast path to string!"
+                    .to_string()
+                    .as_str(),
+                1,
+            )
+        },
+        std::string::ToString::to_string,
+    );
 
     // new folder name
     let new: String = format!("{up_path}\\Dub_dump\\");
@@ -44,8 +49,8 @@ pub fn copy_audio(master: String) -> String {
         ),
     }
     let mut options: CopyOptions = CopyOptions::new(); //Initialize default values for CopyOptions
-    options  = options.content_only(true);
-    
+    options = options.content_only(true);
+
     // copy the directory
     match copy(master, &new, &options) {
         Ok(_) => {}

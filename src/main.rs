@@ -51,9 +51,11 @@ pub mod audio_functions;
 pub mod control_functions;
 pub mod file_functions;
 pub mod helper_functions;
+pub mod sorting_functions;
 pub mod terminal_functions;
 use file_functions::copy_audio::copy_audio;
 use file_functions::get_file_list::get_file_list;
+use sorting_functions::sort_numbered_file::sort_numbered_files;
 
 use crate::audio_functions::audio_controls::{
     speed_down, speed_reset, speed_up, volume_down, volume_up,
@@ -80,7 +82,7 @@ fn main() {
     }
 
     // create our audio sink
-    let packed: PackagedSink = match create_sink() {
+    let _packed: PackagedSink = match create_sink() {
         Ok(ok) => ok,
         Err(err) => graceful_shutdown(
             format!("[main] : Error creating the audio sink and stream: {err:#?}").as_str(),
@@ -96,7 +98,8 @@ fn main() {
     let mut file_list: Vec<String> = get_file_list(child_dir);
 
     // now we need to sort them
-    
+
+    file_list = sort_numbered_files(file_list);
 
     // now we shall enter the main loop
 
@@ -110,9 +113,7 @@ fn main() {
                 1,
             ),
         };
-        file_list.sort_by();
-        println!("{:#?}",file_list);
-        panic!("this is on purpose not a real panic");
+        println!("{file_list:#?}");
         graceful_shutdown("done", 0)
     }
 }

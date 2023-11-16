@@ -5,8 +5,6 @@
 // Delete
 // Volume control
 // Speed controls
-// get dir for files
-// Copy all clips into a new folder upon startup (non destructive editing ftw)
 // Progress bar for currently playing audio
 // Progress bar for total progress
 // Timeline based on clip length
@@ -14,7 +12,7 @@
 // logo shimmer
 // fix window resize message not being displayed on app launch
 // write tests
-// check for preexisting files when doing file check
+// check for preexisting files when doing file check (resume progress)
 
 // Make Clippy angry
 #![warn(
@@ -53,8 +51,11 @@ pub mod file_functions;
 pub mod helper_functions;
 pub mod sorting_functions;
 pub mod terminal_functions;
+use std::ops::Index;
+
 use file_functions::copy_audio::copy_audio;
 use file_functions::get_file_list::get_file_list;
+use file_functions::delete_file::delete_file;
 use sorting_functions::sort_numbered_file::sort_numbered_files;
 
 use crate::audio_functions::audio_controls::{
@@ -101,6 +102,14 @@ fn main() {
 
     file_list = sort_numbered_files(&file_list);
 
+    //TEMP
+    // print first file
+    debug_println!("{}",file_list.index(0));
+    // grab first file and delete it
+    file_list = delete_file(file_list, 0);
+    // print the new first file
+    debug_println!("{}",file_list.index(0));
+    panic!();
     // now we shall enter the main loop
 
     loop {

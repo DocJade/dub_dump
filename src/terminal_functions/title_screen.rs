@@ -30,7 +30,7 @@
 //25  -------------------------------------------------------------------------------- // divider
 //26  ################################################################################ // timeline view, shows relative clip lengths to eachother, current clip in middle
 //27  -------------------------------------------------------------------------------- // divider
-//28  space: replay     s: skip     d: dump     x: reset speed     ^c: exit            // volume / speed?
+//28  space: replay    a: back    s: skip    d: dump    x: reset speed    ^c: exit     // volume / speed?
 //29  up/down: volume     left/right: speed                                  [DocJade] // keybinds
 
 // keybinds

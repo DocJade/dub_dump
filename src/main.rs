@@ -1,10 +1,6 @@
 // TODO in descending order of priority
-// Pause
-// Play
-// make playing when file is over restart the file
 // Delete
-// Volume control
-// Speed controls
+// add replay button to replay mid playback
 // Progress bar for currently playing audio
 // Progress bar for total progress
 // Timeline based on clip length
@@ -51,11 +47,10 @@ pub mod file_functions;
 pub mod helper_functions;
 pub mod sorting_functions;
 pub mod terminal_functions;
-use std::ops::Index;
 
+use control_functions::eval_keypress::eval_keypress;
 use file_functions::copy_audio::copy_audio;
 use file_functions::get_file_list::get_file_list;
-use file_functions::delete_file::delete_file;
 use sorting_functions::sort_numbered_file::sort_numbered_files;
 
 use crate::audio_functions::audio_controls::{
@@ -83,7 +78,7 @@ fn main() {
     }
 
     // create our audio sink
-    let _packed: PackagedSink = match create_sink() {
+    let mut packed: PackagedSink = match create_sink() {
         Ok(ok) => ok,
         Err(err) => graceful_shutdown(
             format!("[main] : Error creating the audio sink and stream: {err:#?}").as_str(),
@@ -102,16 +97,10 @@ fn main() {
 
     file_list = sort_numbered_files(&file_list);
 
-    //TEMP
-    // print first file
-    debug_println!("{}",file_list.index(0));
-    // grab first file and delete it
-    file_list = delete_file(file_list, 0);
-    // print the new first file
-    debug_println!("{}",file_list.index(0));
-    panic!();
-    // now we shall enter the main loop
+    // need an index for the list
+    let mut list_index:usize = 0;
 
+    // now we shall enter the main loop
     loop {
         // check terminal size
 
@@ -122,7 +111,7 @@ fn main() {
                 1,
             ),
         };
-        println!("{file_list:#?}");
-        graceful_shutdown("done", 0)
+        // listen and act on keypresses
+        (packed, file_list, list_index) = eval_keypress(packed, file_list, list_index);
     }
 }

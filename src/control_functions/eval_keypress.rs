@@ -1,22 +1,26 @@
 // terminal related
-//TODO clean up the match statement
+//TODO clean up the match statement (make a lot shorter, more generic??)
 use crossterm::event;
 use crossterm::event::{Event, KeyCode, KeyEvent};
 
+use crate::audio_functions::audio_controls::best_space;
+use crate::audio_functions::audio_controls::skip_back;
+use crate::audio_functions::audio_controls::skip;
 //time
 use crate::audio_functions::create_sink::PackagedSink;
 use crate::graceful_shutdown;
 use crate::{speed_down, speed_reset, speed_up};
 use crate::{volume_down, volume_up};
+use std::ops::Index;
 use std::time::Duration;
 
-pub fn eval_keypress(packed: &PackagedSink) {
+pub fn eval_keypress(mut packed: PackagedSink, file_list: Vec<String>, index: usize) -> (PackagedSink, Vec<String>, usize) {
     // poll for input for 1 144hz frame
     match event::poll(Duration::from_millis(7)) {
         Ok(true) => {
             if let Ok(Event::Key(event)) = event::read() {
                 match event {
-                    // check against keybinds
+                    // check against key binds
 
                     // quit app (^c)
                     KeyEvent {
@@ -36,9 +40,9 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        //quit
                         debug_println!("[eval_keypress] : space pressed, replaying...");
-                        unimplemented!("unimplemented");
+                        packed = best_space(packed, file_list.index(index));
+                        (packed, file_list, index)
                     }
                     // volume up (up key)
                     KeyEvent {
@@ -47,9 +51,9 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        //quit
                         debug_println!("[eval_keypress] : up pressed, increasing volume.");
-                        volume_up(packed);
+                        volume_up(&packed);
+                        (packed, file_list, index)
                     }
 
                     // volume down (down key)
@@ -59,9 +63,9 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        //quit
                         debug_println!("[eval_keypress] : down pressed, decreasing volume.");
-                        volume_down(packed);
+                        volume_down(&packed);
+                        (packed, file_list, index)
                     }
 
                     // speed up (right key)
@@ -71,9 +75,10 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        //quit
+
                         debug_println!("[eval_keypress] : right pressed, increasing speed.");
-                        speed_up(packed);
+                        speed_up(&packed);
+                        (packed, file_list, index)
                     }
 
                     // slow down (left key)
@@ -83,9 +88,9 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        //quit
                         debug_println!("[eval_keypress] : left pressed, decreasing speed.");
-                        speed_down(packed);
+                        speed_down(&packed);
+                        (packed, file_list, index)
                     }
 
                     // reset speed (x)
@@ -95,17 +100,39 @@ pub fn eval_keypress(packed: &PackagedSink) {
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        //quit
                         debug_println!("[eval_keypress] : x pressed, resetting speed.");
-                        speed_reset(packed);
+                        speed_reset(&packed);
+                        (packed, file_list, index)
                     }
 
-                    _ => { /*unimplemented */ }
+                    // previous sound (a)
+                    KeyEvent {
+                        code: KeyCode::Char('a'),
+                        modifiers: event::KeyModifiers::NONE,
+                        kind: event::KeyEventKind::Press,
+                        state: event::KeyEventState::NONE,
+                    } => {
+                        debug_println!("[eval_keypress] : a pressed, going back.");
+                        skip_back(packed, file_list, index)
+                    }
+
+                    // next sound (s)
+                    KeyEvent {
+                        code: KeyCode::Char('s'),
+                        modifiers: event::KeyModifiers::NONE,
+                        kind: event::KeyEventKind::Press,
+                        state: event::KeyEventState::NONE,
+                    } => {
+                        debug_println!("[eval_keypress] : s pressed, skipping sound.");
+                        skip(packed, file_list, index)
+                    }
+
+                    _ => {(packed, file_list, index)}
                 }
                 //debug_println!("[main] : keypress : {:?},{:?}\r", event.code, event.kind);
-            }
+            } else {(packed, file_list, index)}
         }
-        Ok(false) => { /* no pressed keys */ }
+        Ok(false) => {(packed, file_list, index)}
         Err(err) => graceful_shutdown(
             format!("[eval_keypress] : error with reading keypress: {err:#?}").as_str(),
             1,

@@ -1,4 +1,5 @@
 // terminal related
+//TODO clean up the match statement
 use crossterm::event;
 use crossterm::event::{Event, KeyCode, KeyEvent};
 

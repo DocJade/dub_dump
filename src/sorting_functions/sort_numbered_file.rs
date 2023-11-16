@@ -6,7 +6,7 @@ use crate::helper_functions::graceful_shutdown::graceful_shutdown;
 use permutation;
 
 #[must_use]
-pub fn sort_numbered_files(list: Vec<String>) -> Vec<String> {
+pub fn sort_numbered_files(list: &Vec<String>) -> Vec<String> {
     // extract numbers from the clip title
 
     // now we shall loop over our file list, and sort them accordingly
@@ -22,6 +22,7 @@ pub fn sort_numbered_files(list: Vec<String>) -> Vec<String> {
 
     // now sort the original list with the number list
     let permutation = permutation::sort(&numbers);
+    // lots of debugging incase stuff breaks
     debug_println!("list");
     debug_println!("{:#?}", &list);
     debug_println!("numbers");
@@ -29,13 +30,11 @@ pub fn sort_numbered_files(list: Vec<String>) -> Vec<String> {
     debug_println!("number permutation applied");
     debug_println!("{:#?}", permutation.apply_slice(&numbers));
     debug_println!("list permutation applied");
-    debug_println!("{:#?}", permutation.apply_slice(&list));
+    debug_println!("{:#?}", permutation.apply_slice(list));
     debug_println!("permutation");
     debug_println!("{:#?}", permutation);
-    permutation.apply_slice(&list)
+    permutation.apply_slice(list)
 }
-
-
 
 fn extract_numeric_part(filename: &str) -> i32 {
     // string for numbers
@@ -44,17 +43,31 @@ fn extract_numeric_part(filename: &str) -> i32 {
     // remove the file extension.
     let path = Path::new(filename);
 
-    let removing_extension = path.file_stem().map_or_else(|| graceful_shutdown(
-            "[extract_numeric_part] : no file name from path".to_string().as_str(),
-            1,
-        ), |s| s);
+    let removing_extension = path.file_stem().map_or_else(
+        || {
+            graceful_shutdown(
+                "[extract_numeric_part] : no file name from path"
+                    .to_string()
+                    .as_str(),
+                1,
+            )
+        },
+        |s| s,
+    );
 
-    debug_println!("{:#?}",removing_extension);
+    debug_println!("{:#?}", removing_extension);
 
-    let removed_extension = removing_extension.to_str().map_or_else(|| graceful_shutdown(
-            "[extract_numeric_part] : could not convert file name back to str".to_string().as_str(),
-            1,
-        ), |s| s);
+    let removed_extension = removing_extension.to_str().map_or_else(
+        || {
+            graceful_shutdown(
+                "[extract_numeric_part] : could not convert file name back to str"
+                    .to_string()
+                    .as_str(),
+                1,
+            )
+        },
+        |s| s,
+    );
 
     for letter in removed_extension.chars().rev() {
         // work back to front
@@ -86,10 +99,10 @@ fn sort_numbered_files_test_1() {
         "t-9.mp3".to_string(),
         "t-11.mp3".to_string(),
         "t-12.mp3".to_string(),
-        ];
-        
-        // Expected output
-        let expected_sorted_files = vec![
+    ];
+
+    // Expected output
+    let expected_sorted_files = vec![
         "t-8.mp3".to_string(),
         "t-9.mp3".to_string(),
         "t-10.mp3".to_string(),
@@ -98,7 +111,7 @@ fn sort_numbered_files_test_1() {
     ];
 
     // Sort the input files
-    let sorted_files = sort_numbered_files(input_files);
+    let sorted_files = sort_numbered_files(&input_files);
 
     // Assert that the sorted files match the expected output
     assert_eq!(sorted_files, expected_sorted_files);
@@ -123,10 +136,10 @@ fn sort_numbered_files_test_2() {
         "Q:\\\\Dub_dump\\VO_PnumaticMadness-993.mp3".to_string(),
         "Q:\\\\Dub_dump\\VO_PnumaticMadness-994.mp3".to_string(),
         "Q:\\\\Dub_dump\\VO_PnumaticMadness-995.mp3".to_string(),
-        ];
-        
-        // Expected output
-        let expected_sorted_files = vec![
+    ];
+
+    // Expected output
+    let expected_sorted_files = vec![
         "Q:\\\\Dub_dump\\VO_PnumaticMadness-99.mp3".to_string(),
         "Q:\\\\Dub_dump\\VO_PnumaticMadness-981.mp3".to_string(),
         "Q:\\\\Dub_dump\\VO_PnumaticMadness-982.mp3".to_string(),
@@ -143,10 +156,10 @@ fn sort_numbered_files_test_2() {
         "Q:\\\\Dub_dump\\VO_PnumaticMadness-993.mp3".to_string(),
         "Q:\\\\Dub_dump\\VO_PnumaticMadness-994.mp3".to_string(),
         "Q:\\\\Dub_dump\\VO_PnumaticMadness-995.mp3".to_string(),
-        ];
+    ];
 
     // Sort the input files
-    let sorted_files = sort_numbered_files(input_files);
+    let sorted_files = sort_numbered_files(&input_files);
 
     // Assert that the sorted files match the expected output
     assert_eq!(sorted_files, expected_sorted_files);

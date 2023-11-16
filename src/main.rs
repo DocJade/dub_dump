@@ -99,7 +99,7 @@ fn main() {
 
     // now we need to sort them
 
-    file_list = sort_numbered_files(file_list);
+    file_list = sort_numbered_files(&file_list);
 
     // now we shall enter the main loop
 

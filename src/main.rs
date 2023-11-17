@@ -1,12 +1,10 @@
 // TODO in descending order of priority
-// Delete
-// add replay button to replay mid playback
 // Progress bar for currently playing audio
 // Progress bar for total progress
-// Timeline based on clip length
 // audio clip waveform (not animated)
+// statistics window
+// Timeline based on clip length
 // logo shimmer
-// fix window resize message not being displayed on app launch
 // write tests
 // check for preexisting files when doing file check (resume progress)
 // delete undo

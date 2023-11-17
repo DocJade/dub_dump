@@ -37,7 +37,7 @@ pub fn eval_keypress(
                         state: event::KeyEventState::NONE,
                     } => {
                         //quit
-                        debug_log!("[eval_keypress] : ^c pressed, shutting down.");
+                        debug_log!("^c pressed, shutting down.");
                         graceful_shutdown("[eval_keypress] : done!", 0);
                     }
                     // replay (space)
@@ -47,7 +47,7 @@ pub fn eval_keypress(
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        debug_log!("[eval_keypress] : space pressed, replaying...");
+                        debug_log!("space pressed, replaying...");
                         packed = best_space(packed, file_list.index(index));
                         (packed, file_list, index)
                     }
@@ -58,7 +58,7 @@ pub fn eval_keypress(
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        debug_log!("[eval_keypress] : up pressed, increasing volume.");
+                        debug_log!("up pressed, increasing volume.");
                         volume_up(&packed);
                         (packed, file_list, index)
                     }
@@ -70,7 +70,7 @@ pub fn eval_keypress(
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        debug_log!("[eval_keypress] : down pressed, decreasing volume.");
+                        debug_log!("down pressed, decreasing volume.");
                         volume_down(&packed);
                         (packed, file_list, index)
                     }
@@ -82,7 +82,7 @@ pub fn eval_keypress(
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        debug_log!("[eval_keypress] : right pressed, increasing speed.");
+                        debug_log!("right pressed, increasing speed.");
                         speed_up(&packed);
                         (packed, file_list, index)
                     }
@@ -94,7 +94,7 @@ pub fn eval_keypress(
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        debug_log!("[eval_keypress] : left pressed, decreasing speed.");
+                        debug_log!("left pressed, decreasing speed.");
                         speed_down(&packed);
                         (packed, file_list, index)
                     }
@@ -106,7 +106,7 @@ pub fn eval_keypress(
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        debug_log!("[eval_keypress] : x pressed, resetting speed.");
+                        debug_log!("x pressed, resetting speed.");
                         speed_reset(&packed);
                         (packed, file_list, index)
                     }
@@ -118,7 +118,7 @@ pub fn eval_keypress(
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        debug_log!("[eval_keypress] : a pressed, going back.");
+                        debug_log!("a pressed, going back.");
                         skip_back(packed, file_list, index)
                     }
 
@@ -129,7 +129,7 @@ pub fn eval_keypress(
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        debug_log!("[eval_keypress] : s pressed, skipping sound.");
+                        debug_log!("s pressed, skipping sound.");
                         skip(packed, file_list, index)
                     }
 
@@ -140,7 +140,7 @@ pub fn eval_keypress(
                         kind: event::KeyEventKind::Press,
                         state: event::KeyEventState::NONE,
                     } => {
-                        debug_log!("[eval_keypress] : d pressed, deleting sound.");
+                        debug_log!("d pressed, deleting sound.");
                         let new_file_list = delete_file(file_list, index);
                         // now play the new sound
                         match play_audio_file(std::path::Path::new(new_file_list.index(index)), &mut packed){
@@ -153,7 +153,10 @@ pub fn eval_keypress(
                         (packed, new_file_list, index)
                     }
 
-                    _ => (packed, file_list, index),
+                    _ => {
+                        debug_log!("Key without command pressed, ignoring.");
+                        (packed, file_list, index)
+                    },
                 }
                 //debug_log!("[main] : keypress : {:?},{:?}\r", event.code, event.kind);
             } else {

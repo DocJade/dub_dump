@@ -54,6 +54,7 @@ pub mod terminal_functions;
 use control_functions::eval_keypress::eval_keypress;
 use file_functions::copy_audio::copy_audio;
 use file_functions::get_file_list::get_file_list;
+use helper_functions::setup_logging::setup_logging;
 use sorting_functions::sort_numbered_file::sort_numbered_files;
 use terminal_functions::title_screen::draw_static_bits;
 
@@ -80,20 +81,23 @@ const VERSION_STRING: &str = "Version 0.0.0 Nov 16 2022";
 fn main() {
     // start logger if we are in a debug build
     if ::std::cfg!(debug_assertions) {
-        //later
+        setup_logging();
+        debug_log!("Hello world!");
     }
     //bring the splashes with us
     let splashes: &[u8] = include_bytes!("splashes.txt");
-
+    
     // get a random splash
-
+    
+    debug_log!("Picking splash...");
     let splash_text = pick_splash(splashes);
-
+    
+    debug_log!("Splash picked. \"{splash_text}\"");
     // do terminal setup
 
     match terminal_setup() {
         Ok(_) => {
-            debug_log!("[main] : Terminal ready!");
+            debug_log!("Terminal ready!");
         }
         Err(err) => graceful_shutdown(
             format!("[main] : error setting up the terminal.: {err:#?}").as_str(),
@@ -111,23 +115,28 @@ fn main() {
     };
 
     // now we need to get our directory and copy the audio files to a new folder
+    debug_log!("Asking user for directory...");
     let master_dir: String = get_dir();
+    debug_log!("Cloning directory...");
     let child_dir: String = copy_audio(master_dir);
-
+    
+    debug_log!("Listing files...");
     // then make a list of all audio files
     let mut file_list: Vec<String> = get_file_list(child_dir);
-
+    
     // now we need to sort them
-
+    
+    debug_log!("Sorting files...");
     file_list = sort_numbered_files(&file_list);
-
+    
     // need an index for the list
     let mut list_index: usize = 0;
-
+    
     // print the main screen
     draw_static_bits(splash_text, VERSION_STRING.to_string());
-
+    
     // now we shall enter the main loop
+    debug_log!("Entering main loop!");
     loop {
         // check terminal size
 

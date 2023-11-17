@@ -59,6 +59,7 @@ use super::draw_text::{draw_text, PrintableText};
 
 #[allow(clippy::pedantic)] // shut up about the line count, i know, ill fix it later // break each part into its own function
 pub fn draw_static_bits(splash: String, version_text: String) {
+    debug_log!("Drawing the title screen...");
     // only draw the parts of the screen that do not change
 
     // clear the screen

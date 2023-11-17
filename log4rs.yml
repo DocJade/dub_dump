@@ -1,11 +1,17 @@
+# Scan this file for changes every 10 seconds
+refresh_rate: 10 seconds
+
 appenders:
-  file:
-    type: file
-    file: log.txt
-    layout:
-      pattern: "[{level}] {message}"
-loggers:
-  root:
-    level: TRACE
-    appenders:
-      - file
+  # An appender named "loggy" that writes to log
+  loggy:
+    kind: file
+    path: loggy.log
+    append: false
+    encoder:
+      pattern: "[{M:>40}] : [{line:<4}] {d(%Y/%m/%d %H:%M:%S)}: {m}{n}"
+
+# Set the default logging level to "warn" and attach the "stdout" appender to the root
+root:
+  level: debug
+  appenders:
+    - loggy

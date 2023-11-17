@@ -33,7 +33,7 @@ pub fn toggle_play(packed: &PackagedSink) {
 pub fn best_space(mut packed: PackagedSink, current_file: &str) -> PackagedSink {
     // test if the sound buffer is empty
     if packed.sink.empty() {
-        debug_log!("[best_space] : No file playing, replaying...");
+        debug_log!("No file playing, replaying...");
         // out of sounds! replay the current file
         match play_audio_file(std::path::Path::new(&current_file), &mut packed) {
             Ok(_) => {}
@@ -44,7 +44,7 @@ pub fn best_space(mut packed: PackagedSink, current_file: &str) -> PackagedSink 
         };
     } else {
         // buffer is not empty
-        debug_log!("[best_space] : Buffer is not empty, toggling...");
+        debug_log!("Buffer is not empty, toggling...");
         toggle_play(&packed);
     }
     packed
@@ -66,7 +66,7 @@ pub fn volume_down(packed: &PackagedSink) {
 }
 
 pub fn get_volume(packed: &PackagedSink) -> f32 {
-    debug_log!("[get_volume] : volume is {}.", packed.sink.volume());
+    debug_log!("volume is {}.", packed.sink.volume());
     packed.sink.volume()
 }
 
@@ -83,7 +83,7 @@ pub fn speed_down(packed: &PackagedSink) {
 pub fn speed_reset(packed: &PackagedSink) {
     // 100% speed
     packed.sink.set_speed(1.0);
-    debug_log!("[speed_reset] : Speed reset to 100%");
+    debug_log!("Speed reset to 100%");
 }
 
 #[must_use]
@@ -96,7 +96,7 @@ pub fn skip(
 
     if index + 1 > file_list.len() {
         // too far!
-        debug_log!("[skip] : Tried to skip, but hit end of vec.");
+        debug_log!("Tried to skip, but hit end of vec.");
         return (packed, file_list, index);
     }
 
@@ -106,12 +106,12 @@ pub fn skip(
 
     // stop previous audio
 
-    debug_log!("[skip] : Stopping previous sound...");
+    debug_log!("Stopping previous sound...");
     stop(&packed);
 
     // play new file.
 
-    debug_log!("[skip] : Playing new sound...");
+    debug_log!("Playing new sound...");
     match play_audio_file(
         std::path::Path::new(file_list.index(new_index)),
         &mut packed,
@@ -133,7 +133,7 @@ pub fn skip_back(
 
     if index == 0 {
         // too far!
-        debug_log!("[skip] : Tried to skip, but hit beginning of vec.");
+        debug_log!("Tried to skip, but hit beginning of vec.");
         return (packed, file_list, index);
     }
 
@@ -148,7 +148,7 @@ pub fn skip_back(
 
     // play new file.
 
-    debug_log!("[skip] : Playing new sound...");
+    debug_log!("Playing new sound...");
     match play_audio_file(
         std::path::Path::new(file_list.index(new_index)),
         &mut packed,

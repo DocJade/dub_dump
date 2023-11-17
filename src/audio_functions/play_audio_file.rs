@@ -21,7 +21,7 @@ pub enum FilePlayError {
 /// will panic if we see a new kind of file error
 pub fn play_audio_file(file_path: &Path, packed: &mut PackagedSink) -> Result<(), FilePlayError> {
     debug_log!(
-        "[play_audio_file] : Attempting to play: {:?}...",
+        "Attempting to play: {:?}...",
         file_path.to_str()
     );
 
@@ -39,7 +39,7 @@ pub fn play_audio_file(file_path: &Path, packed: &mut PackagedSink) -> Result<()
         },
     };
 
-    debug_log!("[play_audio_file] : File opened...");
+    debug_log!("File opened...");
 
     // Decode the sound
     let decoder = match rodio::Decoder::new(sound) {
@@ -47,12 +47,12 @@ pub fn play_audio_file(file_path: &Path, packed: &mut PackagedSink) -> Result<()
         Err(err) => return Err(FilePlayError::Unknown(err.to_string())),
     };
 
-    debug_log!("[play_audio_file] : Sound decoded...");
+    debug_log!("Sound decoded...");
 
     //play
     packed.sink.append(decoder);
 
-    debug_log!("[play_audio_file] : Sound playing!");
+    debug_log!("Sound playing!");
 
     Ok(())
 }

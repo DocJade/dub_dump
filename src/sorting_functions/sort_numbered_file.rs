@@ -23,16 +23,16 @@ pub fn sort_numbered_files(list: &Vec<String>) -> Vec<String> {
     // now sort the original list with the number list
     let permutation = permutation::sort(&numbers);
     // lots of debugging incase stuff breaks
-    debug_println!("list");
-    debug_println!("{:#?}", &list);
-    debug_println!("numbers");
-    debug_println!("{:#?}", &numbers);
-    debug_println!("number permutation applied");
-    debug_println!("{:#?}", permutation.apply_slice(&numbers));
-    debug_println!("list permutation applied");
-    debug_println!("{:#?}", permutation.apply_slice(list));
-    debug_println!("permutation");
-    debug_println!("{:#?}", permutation);
+    debug_log!("list");
+    debug_log!("{:#?}", &list);
+    debug_log!("numbers");
+    debug_log!("{:#?}", &numbers);
+    debug_log!("number permutation applied");
+    debug_log!("{:#?}", permutation.apply_slice(&numbers));
+    debug_log!("list permutation applied");
+    debug_log!("{:#?}", permutation.apply_slice(list));
+    debug_log!("permutation");
+    debug_log!("{:#?}", permutation);
     permutation.apply_slice(list)
 }
 
@@ -55,7 +55,7 @@ fn extract_numeric_part(filename: &str) -> i32 {
         |s| s,
     );
 
-    debug_println!("{:#?}", removing_extension);
+    debug_log!("{:#?}", removing_extension);
 
     let removed_extension = removing_extension.to_str().map_or_else(
         || {

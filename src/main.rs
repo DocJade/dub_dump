@@ -11,6 +11,8 @@
 // check for preexisting files when doing file check (resume progress)
 // delete undo
 
+// figure out why i cannot print to col 80
+
 // Make Clippy angry
 #![warn(
     clippy::pedantic,
@@ -38,8 +40,8 @@
 
 //public debug
 #[macro_export]
-macro_rules! debug_println {
-    ($($arg:tt)*) => (if ::std::cfg!(debug_assertions) { ::std::println!($($arg)*); })
+macro_rules! debug_log {
+    ($($arg:tt)*) => (if ::std::cfg!(debug_assertions) { ::log::debug!($($arg)*); })
 }
 
 pub mod audio_functions;
@@ -53,6 +55,7 @@ use control_functions::eval_keypress::eval_keypress;
 use file_functions::copy_audio::copy_audio;
 use file_functions::get_file_list::get_file_list;
 use sorting_functions::sort_numbered_file::sort_numbered_files;
+use terminal_functions::title_screen::draw_static_bits;
 
 use crate::audio_functions::audio_controls::{
     speed_down, speed_reset, speed_up, volume_down, volume_up,
@@ -67,14 +70,21 @@ use crate::terminal_functions::set_size::set_size;
 use crate::terminal_functions::terminal_setup::terminal_setup;
 
 
+//Constants
+
+const VERSION_STRING: &str = "Version 0.0.0 Nov 16 2022";
 
 
 
 
 fn main() {
+    // start logger if we are in a debug build
+    if ::std::cfg!(debug_assertions) {
+        //later
+    }
     //bring the splashes with us
     let splashes: &[u8] = include_bytes!("splashes.txt");
-    
+
     // get a random splash
 
     let splash_text = pick_splash(splashes);
@@ -83,7 +93,7 @@ fn main() {
 
     match terminal_setup() {
         Ok(_) => {
-            debug_println!("[main] : Terminal ready!");
+            debug_log!("[main] : Terminal ready!");
         }
         Err(err) => graceful_shutdown(
             format!("[main] : error setting up the terminal.: {err:#?}").as_str(),
@@ -112,7 +122,10 @@ fn main() {
     file_list = sort_numbered_files(&file_list);
 
     // need an index for the list
-    let mut list_index:usize = 0;
+    let mut list_index: usize = 0;
+
+    // print the main screen
+    draw_static_bits(splash_text, VERSION_STRING.to_string());
 
     // now we shall enter the main loop
     loop {
@@ -131,23 +144,23 @@ fn main() {
 }
 
 
+
+
 // tests
 #[test]
-fn have_splashes_test(){
+fn have_splashes_test() {
     // check to make sure splashes.txt isnt empty
     let splashes = include_bytes!("splashes.txt");
     assert!(!splashes.is_empty()); // make sure it isnt empty
 }
 
 #[test]
-fn properly_sized_splashes(){
+fn properly_sized_splashes() {
     // make sure no splashes are more than 56 char wide.
     let splashes = include_bytes!("splashes.txt");
     let split_splashes: Vec<&str> = match std::str::from_utf8(splashes) {
-        Ok(text) => {
-            text.split('\n').collect()
-        },
-        Err(err) => panic!("Unable to split splashes.txt! : {err}")
+        Ok(text) => text.split('\n').collect(),
+        Err(err) => panic!("Unable to split splashes.txt! : {err}"),
     };
     for splash in split_splashes {
         assert!(splash.len() <= 56);
@@ -155,14 +168,12 @@ fn properly_sized_splashes(){
 }
 
 #[test]
-fn no_empty_splashes(){
+fn no_empty_splashes() {
     // make sure no splashes are empty.
     let splashes = include_bytes!("splashes.txt");
     let split_splashes: Vec<&str> = match std::str::from_utf8(splashes) {
-        Ok(text) => {
-            text.split('\n').collect()
-        },
-        Err(err) => panic!("Unable to split splashes.txt! : {err}")
+        Ok(text) => text.split('\n').collect(),
+        Err(err) => panic!("Unable to split splashes.txt! : {err}"),
     };
     for splash in split_splashes {
         assert!(!splash.is_empty());
@@ -170,7 +181,7 @@ fn no_empty_splashes(){
 }
 
 #[test]
-fn no_newline_at_end_of_splashes(){
+fn no_newline_at_end_of_splashes() {
     // make sure there isnt a newline at the end of the splash file
     let splashes = include_bytes!("splashes.txt");
     assert_ne!(splashes.last(), Some(&b'\n')); // make sure it isnt empty

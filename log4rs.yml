@@ -1,0 +1,11 @@
+appenders:
+  file:
+    type: file
+    file: log.txt
+    layout:
+      pattern: "[{level}] {message}"
+loggers:
+  root:
+    level: TRACE
+    appenders:
+      - file

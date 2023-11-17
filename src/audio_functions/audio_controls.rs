@@ -33,19 +33,18 @@ pub fn toggle_play(packed: &PackagedSink) {
 pub fn best_space(mut packed: PackagedSink, current_file: &str) -> PackagedSink {
     // test if the sound buffer is empty
     if packed.sink.empty() {
-        debug_println!("[best_space] : No file playing, replaying...");
+        debug_log!("[best_space] : No file playing, replaying...");
         // out of sounds! replay the current file
         match play_audio_file(std::path::Path::new(&current_file), &mut packed) {
-            Ok(_) => {},
+            Ok(_) => {}
             Err(err) => graceful_shutdown(
-                format!("[best_space] : could not replay file! {err:?}")
-                .as_str(),
+                format!("[best_space] : could not replay file! {err:?}").as_str(),
                 1,
             ),
         };
     } else {
         // buffer is not empty
-        debug_println!("[best_space] : Buffer is not empty, toggling...");
+        debug_log!("[best_space] : Buffer is not empty, toggling...");
         toggle_play(&packed);
     }
     packed
@@ -67,7 +66,7 @@ pub fn volume_down(packed: &PackagedSink) {
 }
 
 pub fn get_volume(packed: &PackagedSink) -> f32 {
-    debug_println!("[get_volume] : volume is {}.", packed.sink.volume());
+    debug_log!("[get_volume] : volume is {}.", packed.sink.volume());
     packed.sink.volume()
 }
 
@@ -84,75 +83,79 @@ pub fn speed_down(packed: &PackagedSink) {
 pub fn speed_reset(packed: &PackagedSink) {
     // 100% speed
     packed.sink.set_speed(1.0);
-    debug_println!("[speed_reset] : Speed reset to 100%");
+    debug_log!("[speed_reset] : Speed reset to 100%");
 }
 
 #[must_use]
-pub fn skip(mut packed: PackagedSink, file_list: Vec<String>, index: usize) -> (PackagedSink, Vec<String>, usize) {
+pub fn skip(
+    mut packed: PackagedSink,
+    file_list: Vec<String>,
+    index: usize,
+) -> (PackagedSink, Vec<String>, usize) {
     // make sure we can actually skip
 
-    if index+1 > file_list.len() {
+    if index + 1 > file_list.len() {
         // too far!
-        debug_println!("[skip] : Tried to skip, but hit end of vec.");
-        return (packed, file_list, index)
+        debug_log!("[skip] : Tried to skip, but hit end of vec.");
+        return (packed, file_list, index);
     }
-    
+
     // we're good!
-    
+
     let new_index = index + 1;
-    
+
     // stop previous audio
-    
-    debug_println!("[skip] : Stopping previous sound...");
+
+    debug_log!("[skip] : Stopping previous sound...");
     stop(&packed);
-    
+
     // play new file.
-    
-    debug_println!("[skip] : Playing new sound...");
-    match play_audio_file(std::path::Path::new(file_list.index(new_index)), &mut packed){
-        Ok(_) => {},
-        Err(err) => graceful_shutdown(
-            format!("[skip] : could not play file! {err:?}")
-            .as_str(),
-            1,
-        ),
+
+    debug_log!("[skip] : Playing new sound...");
+    match play_audio_file(
+        std::path::Path::new(file_list.index(new_index)),
+        &mut packed,
+    ) {
+        Ok(_) => {}
+        Err(err) => graceful_shutdown(format!("[skip] : could not play file! {err:?}").as_str(), 1),
     }
     // file is playing! return values.
     (packed, file_list, new_index)
-    
 }
 
 #[must_use]
-pub fn skip_back(mut packed: PackagedSink, file_list: Vec<String>, index: usize) -> (PackagedSink, Vec<String>, usize) {
+pub fn skip_back(
+    mut packed: PackagedSink,
+    file_list: Vec<String>,
+    index: usize,
+) -> (PackagedSink, Vec<String>, usize) {
     // make sure we can actually skip
 
     if index == 0 {
         // too far!
-        debug_println!("[skip] : Tried to skip, but hit beginning of vec.");
-        return (packed, file_list, index)
+        debug_log!("[skip] : Tried to skip, but hit beginning of vec.");
+        return (packed, file_list, index);
     }
-    
+
     // we're good!
-    
+
     let new_index = index - 1;
-    
+
     // stop previous audio
-    
-    debug_println!("[skip] : Stopping previous sound...");
+
+    debug_log!("[skip] : Stopping previous sound...");
     stop(&packed);
-    
+
     // play new file.
-    
-    debug_println!("[skip] : Playing new sound...");
-    match play_audio_file(std::path::Path::new(file_list.index(new_index)), &mut packed){
-        Ok(_) => {},
-        Err(err) => graceful_shutdown(
-            format!("[skip] : could not play file! {err:?}")
-            .as_str(),
-            1,
-        ),
+
+    debug_log!("[skip] : Playing new sound...");
+    match play_audio_file(
+        std::path::Path::new(file_list.index(new_index)),
+        &mut packed,
+    ) {
+        Ok(_) => {}
+        Err(err) => graceful_shutdown(format!("[skip] : could not play file! {err:?}").as_str(), 1),
     }
     // file is playing! return values.
     (packed, file_list, new_index)
-    
 }

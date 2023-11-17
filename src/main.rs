@@ -9,6 +9,7 @@
 // fix window resize message not being displayed on app launch
 // write tests
 // check for preexisting files when doing file check (resume progress)
+// delete undo
 
 // Make Clippy angry
 #![warn(

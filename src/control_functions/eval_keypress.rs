@@ -6,6 +6,8 @@ use crossterm::event::{Event, KeyCode, KeyEvent};
 use crate::audio_functions::audio_controls::best_space;
 use crate::audio_functions::audio_controls::skip_back;
 use crate::audio_functions::audio_controls::skip;
+use crate::audio_functions::play_audio_file::play_audio_file;
+use crate::file_functions::delete_file::delete_file;
 //time
 use crate::audio_functions::create_sink::PackagedSink;
 use crate::graceful_shutdown;
@@ -14,6 +16,7 @@ use crate::{volume_down, volume_up};
 use std::ops::Index;
 use std::time::Duration;
 
+#[allow(clippy::pedantic)] // shut up about the line count, i know, ill fix it later
 pub fn eval_keypress(mut packed: PackagedSink, file_list: Vec<String>, index: usize) -> (PackagedSink, Vec<String>, usize) {
     // poll for input for 1 144hz frame
     match event::poll(Duration::from_millis(7)) {
@@ -125,6 +128,26 @@ pub fn eval_keypress(mut packed: PackagedSink, file_list: Vec<String>, index: us
                     } => {
                         debug_println!("[eval_keypress] : s pressed, skipping sound.");
                         skip(packed, file_list, index)
+                    }
+
+                    // delete clip (d)
+                    KeyEvent {
+                        code: KeyCode::Char('d'),
+                        modifiers: event::KeyModifiers::NONE,
+                        kind: event::KeyEventKind::Press,
+                        state: event::KeyEventState::NONE,
+                    } => {
+                        debug_println!("[eval_keypress] : d pressed, deleting sound.");
+                        let new_file_list = delete_file(file_list, index);
+                        // now play the new sound
+                        match play_audio_file(std::path::Path::new(new_file_list.index(index)), &mut packed){
+                            Ok(_) => {},
+                            Err(err) => graceful_shutdown(
+                                format!("[eval_keypress] : error playing new file after deleting!: {err:#?}").as_str(),
+                                1,
+                            ),
+                        };
+                        (packed, new_file_list, index)
                     }
 
                     _ => {(packed, file_list, index)}

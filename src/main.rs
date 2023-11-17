@@ -62,10 +62,23 @@ use crate::audio_functions::create_sink::{create_sink, PackagedSink};
 use crate::file_functions::get_dir::get_dir;
 //use crate::audio_functions::play_audio_file::play_audio_file;
 use crate::helper_functions::graceful_shutdown::graceful_shutdown;
+use crate::helper_functions::pick_splash::pick_splash;
 use crate::terminal_functions::set_size::set_size;
 use crate::terminal_functions::terminal_setup::terminal_setup;
 
+
+
+
+
+
 fn main() {
+    //bring the splashes with us
+    let splashes: &[u8] = include_bytes!("splashes.txt");
+    
+    // get a random splash
+
+    let splash_text = pick_splash(splashes);
+
     // do terminal setup
 
     match terminal_setup() {
@@ -115,4 +128,50 @@ fn main() {
         // listen and act on keypresses
         (packed, file_list, list_index) = eval_keypress(packed, file_list, list_index);
     }
+}
+
+
+// tests
+#[test]
+fn have_splashes_test(){
+    // check to make sure splashes.txt isnt empty
+    let splashes = include_bytes!("splashes.txt");
+    assert!(!splashes.is_empty()); // make sure it isnt empty
+}
+
+#[test]
+fn properly_sized_splashes(){
+    // make sure no splashes are more than 56 char wide.
+    let splashes = include_bytes!("splashes.txt");
+    let split_splashes: Vec<&str> = match std::str::from_utf8(splashes) {
+        Ok(text) => {
+            text.split('\n').collect()
+        },
+        Err(err) => panic!("Unable to split splashes.txt! : {err}")
+    };
+    for splash in split_splashes {
+        assert!(splash.len() <= 56);
+    }
+}
+
+#[test]
+fn no_empty_splashes(){
+    // make sure no splashes are empty.
+    let splashes = include_bytes!("splashes.txt");
+    let split_splashes: Vec<&str> = match std::str::from_utf8(splashes) {
+        Ok(text) => {
+            text.split('\n').collect()
+        },
+        Err(err) => panic!("Unable to split splashes.txt! : {err}")
+    };
+    for splash in split_splashes {
+        assert!(!splash.is_empty());
+    }
+}
+
+#[test]
+fn no_newline_at_end_of_splashes(){
+    // make sure there isnt a newline at the end of the splash file
+    let splashes = include_bytes!("splashes.txt");
+    assert_ne!(splashes.last(), Some(&b'\n')); // make sure it isnt empty
 }

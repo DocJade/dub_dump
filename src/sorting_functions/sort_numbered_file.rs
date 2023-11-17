@@ -91,7 +91,7 @@ fn extract_numeric_part(filename: &str) -> i32 {
 // test that mf
 
 #[test]
-fn sort_numbered_files_test_1() {
+fn sort_numbered_files_test_short() {
     // Test input
     let input_files = vec![
         "t-10.mp3".to_string(),
@@ -117,7 +117,7 @@ fn sort_numbered_files_test_1() {
     assert_eq!(sorted_files, expected_sorted_files);
 }
 #[test]
-fn sort_numbered_files_test_2() {
+fn sort_numbered_files_test_long() {
     // Test input
     let input_files = vec![
         "Q:\\\\Dub_dump\\VO_PnumaticMadness-981.mp3".to_string(),

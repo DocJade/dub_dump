@@ -133,14 +133,14 @@ fn main() {
     debug_log!("Cloning directory...");
     println!("Cloning audio...");
     let child_dir: String = copy_audio(master_dir);
-    
+
     debug_log!("Listing files...");
     println!("Listing files...");
     // then make a list of all audio files
     let mut file_list: Vec<String> = get_file_list(child_dir);
-    
+
     // now we need to sort them
-    
+
     debug_log!("Sorting files...");
     println!("Sorting files...");
     file_list = sort_numbered_files(&file_list);
@@ -159,10 +159,16 @@ fn main() {
     };
 
     //update
-    
+
     debug_log!("Calculating initial statistics...");
     println!("Calculating audio length, this may take a while...");
-    statistics = update_statistics(statistics, file_list.len(), 0, get_runtime(file_list.clone()), 0.0);
+    statistics = update_statistics(
+        statistics,
+        file_list.len(),
+        0,
+        get_runtime(file_list.clone()),
+        0.0,
+    );
     debug_log!("Done!");
 
     // check terminal size
@@ -178,7 +184,7 @@ fn main() {
     // print the main screen
     debug_log!("Drawing static elements...");
     draw_static_bits(splash_text, VERSION_STRING.to_string());
-    
+
     debug_log!("Drawing non-static elements...");
     draw_non_static(&statistics, list_index);
 

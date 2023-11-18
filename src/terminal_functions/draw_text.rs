@@ -29,17 +29,17 @@ pub fn draw_text(text: &PrintableText) -> Result<(), DrawError> {
 }
 
 // now make a macro for easier drawing, if it fails, exit program.
-pub fn easy_draw_text(string:String, pos_x:u16, pos_y:u16) {
-        match draw_text(&PrintableText {
-            text_color: colored::Color::White,
-            message: string,
-            pos_x,
-            pos_y,
-        }) {
-            Ok(_) => {}
-            Err(err) => crate::helper_functions::graceful_shutdown::graceful_shutdown(
-                &format!("[MACRO][easy_draw_text] : Issue drawing {:#?}",err),
-                1,
-            ),
-        }
+pub fn easy_draw_text(string: String, pos_x: u16, pos_y: u16) {
+    match draw_text(&PrintableText {
+        text_color: colored::Color::White,
+        message: string,
+        pos_x,
+        pos_y,
+    }) {
+        Ok(_) => {}
+        Err(err) => crate::helper_functions::graceful_shutdown::graceful_shutdown(
+            &format!("[MACRO][easy_draw_text] : Issue drawing {:#?}", err),
+            1,
+        ),
+    }
 }

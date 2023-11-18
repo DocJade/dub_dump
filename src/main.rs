@@ -81,7 +81,7 @@ use crate::terminal_functions::terminal_setup::terminal_setup;
 
 //Constants
 
-const VERSION_STRING: &str = "Version 0.0.0 Nov 18 2022";
+const VERSION_STRING: &str = "Version 1.0.0 Nov 18 2022";
 
 // struct for statistics
 

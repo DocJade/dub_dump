@@ -9,6 +9,7 @@
 // check for preexisting files when doing file check (resume progress)
 // delete undo
 // track audio length inside of file list to never recalculate the file lengths more than once.
+// fix cognitive complexity on functions by breaking them up more.
 
 // figure out why i cannot print to col 80
 

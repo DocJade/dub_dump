@@ -29,6 +29,7 @@ pub fn draw_text(text: &PrintableText) -> Result<(), DrawError> {
 }
 
 // now make a macro for easier drawing, if it fails, exit program.
+#[allow(clippy::module_name_repetitions)] // yes clippy i know, this is the _easy_ variant and i would like to name it as such
 pub fn easy_draw_text(string: String, pos_x: u16, pos_y: u16) {
     match draw_text(&PrintableText {
         text_color: colored::Color::White,

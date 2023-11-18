@@ -6,6 +6,7 @@ use crate::Statistics;
 
 use super::draw_text::easy_draw_text;
 
+#[allow(clippy::cast_precision_loss)] // no way we will ever have > 4,503,599,600,000,000 files to index.
 pub fn draw_non_static(stats: &Statistics, current_index: usize) {
     // first up, draw the statistics
     easy_draw_text(format!("{: >5}", stats.total_clips.to_string()), 74, 1);
@@ -38,6 +39,8 @@ pub fn draw_non_static(stats: &Statistics, current_index: usize) {
     total_progress_percentage = (stats.dumped_clips as i64 - stats.total_clips as i64) as f64;
     total_progress_percentage = current_float_index / total_progress_percentage;
 
+    #[allow(clippy::cast_possible_truncation)] // there is not any resonable scenario where this would be an issue
+    #[allow(clippy::cast_sign_loss)] // dealing with positive numbers only anyways.
     let pop_amount: u16 = (79_f64 * total_progress_percentage).floor() as u16;
     // pop off the dots
     for _ in 0..=pop_amount {

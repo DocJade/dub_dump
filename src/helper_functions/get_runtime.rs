@@ -7,6 +7,9 @@ use crate::helper_functions::graceful_shutdown::graceful_shutdown;
 // TODO
 // rewrite this, why cannot i get the file length directly?
 
+// TODO 
+// Improve performance? debug builds take 8x the boot time
+
 // take in a list of files and calculate the total runtime in seconds in F64
 #[must_use]
 pub fn get_runtime(files: Vec<String>) -> f64 {
@@ -72,6 +75,9 @@ pub fn get_runtime(files: Vec<String>) -> f64 {
         // calculate sound length in seconds
 
         let samples = decoder1.count();
+        #[allow(clippy::cast_precision_loss)] //    yes i know this can truncate, i doubt the sample rate or samples will be
+        //                                          large enough to actually cause an issue
+        
         let length = samples as f64 / f64::from(sample_rate);
         // debug_log!("File:{}, Length:{}s", file, length);
         // get length

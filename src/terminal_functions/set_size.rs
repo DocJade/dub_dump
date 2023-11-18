@@ -65,7 +65,7 @@ pub fn set_size() -> Result<(), TerminalSizeError> {
             };
             // finally, print it.
             match draw_text(&printer) {
-                Ok(_) => {}
+                Ok(()) => {}
                 Err(err) => return Err(TerminalSizeError::DrawError(err)),
             };
             thread::sleep(time::Duration::from_millis(250));
@@ -101,7 +101,7 @@ pub fn set_size() -> Result<(), TerminalSizeError> {
         };
         // finally, print it.
         match draw_text(&printer) {
-            Ok(_) => {}
+            Ok(()) => {}
             Err(err) => return Err(TerminalSizeError::DrawError(err)),
         };
     }

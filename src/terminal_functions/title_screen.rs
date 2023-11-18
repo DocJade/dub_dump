@@ -28,7 +28,7 @@
 //23                                                                                  // gap
 //24  Volume: ???%     Speed: ???%                                                    // Volume and speed indicators
 //25  ------------------------------------------------------------------------------- // divider
-//26  ############################################################################### // timeline view, shows relative clip lengths to eachother, current clip in middle
+//26  ############################################################################### // timeline view, shows relative clip lengths to each other, current clip in middle
 //27  ------------------------------------------------------------------------------- // divider
 //28  space: replay    a: back    s: skip    d: dump    x: reset speed    ^c: exit    // volume / speed?
 //29  up/down: volume     left/right: speed                                 [DocJade] // keybinds
@@ -107,7 +107,7 @@ fn draw_logo() {
             pos_y: n,
         });
         match result {
-            Ok(_) => {}
+            Ok(()) => {}
             Err(err) => graceful_shutdown(
                 &format!("[draw_static_bits] : Issue drawing logo! {err:#?}"),
                 1,
@@ -131,7 +131,7 @@ fn draw_splash(splash: String) {
         pos_x: center,
         pos_y: 6,
     }) {
-        Ok(_) => {}
+        Ok(()) => {}
         Err(err) => graceful_shutdown(
             &format!("[draw_static_bits] : Issue drawing splash! {err:#?}"),
             1,
@@ -157,7 +157,7 @@ fn draw_controls() {
             pos_y: n + 28,
         });
         match result {
-            Ok(_) => {}
+            Ok(()) => {}
             Err(err) => graceful_shutdown(
                 &format!("[draw_static_bits] : Issue drawing statistics! {err:#?}"),
                 1,
@@ -179,7 +179,7 @@ fn draw_version(version: String) {
         pos_x: center,
         pos_y: 5,
     }) {
-        Ok(_) => {}
+        Ok(()) => {}
         Err(err) => graceful_shutdown(
             &format!("[draw_static_bits] : Issue drawing version! {err:#?}"),
             1,
@@ -206,7 +206,7 @@ fn draw_statics_bg() {
             pos_y: n,
         });
         match result {
-            Ok(_) => {}
+            Ok(()) => {}
             Err(err) => graceful_shutdown(
                 &format!("[draw_static_bits] : Issue drawing statistics! {err:#?}"),
                 1,
@@ -229,7 +229,7 @@ fn draw_lines() {
             pos_y: line,
         });
         match result {
-            Ok(_) => {}
+            Ok(()) => {}
             Err(err) => graceful_shutdown(
                 &format!("[draw_static_bits] : Issue drawing lines! {err:#?}"),
                 1,
@@ -247,7 +247,7 @@ fn draw_lines() {
             pos_y: line,
         });
         match result {
-            Ok(_) => {}
+            Ok(()) => {}
             Err(err) => graceful_shutdown(
                 &format!("[draw_static_bits] : Issue drawing lines! {err:#?}"),
                 1,
@@ -262,7 +262,7 @@ fn draw_lines() {
         pos_x: 58,
         pos_y: 7,
     }) {
-        Ok(_) => {}
+        Ok(()) => {}
         Err(err) => graceful_shutdown(
             &format!("[draw_static_bits] : Issue drawing the plus! {err:#?}"),
             1,

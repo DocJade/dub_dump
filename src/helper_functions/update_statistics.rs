@@ -12,7 +12,7 @@ use crate::Statistics;
 
 // update stats by ingesting update data
 #[must_use]
-#[allow(clippy::pedantic)] // dont care about the FP precision lost
+#[allow(clippy::pedantic)] // don't care about the FP precision lost
 pub fn update_statistics(
     old_stats: Statistics,
     total_change: i64,

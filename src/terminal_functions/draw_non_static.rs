@@ -44,7 +44,7 @@ pub fn draw_non_static(stats: &Statistics, current_index: usize) {
     total_progress_percentage = current_float_index / total_progress_percentage;
     total_progress_percentage *= -1.0;
 
-    #[allow(clippy::cast_possible_truncation)] // there is not any resonable scenario where this would be an issue
+    #[allow(clippy::cast_possible_truncation)] // there is not any reasonable scenario where this would be an issue
     #[allow(clippy::cast_sign_loss)] // dealing with positive numbers only anyways.
     let pop_amount: u16 = (79_f64 * total_progress_percentage).floor() as u16;
     // pop off the dots

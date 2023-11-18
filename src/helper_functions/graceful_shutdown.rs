@@ -5,7 +5,7 @@ pub fn graceful_shutdown(message: &str, code: i32) -> ! {
     //shutdown cleanup
 
     match terminal::disable_raw_mode() {
-        Ok(_) => {}
+        Ok(()) => {}
         Err(err) => crate::helper_functions::graceful_shutdown::graceful_shutdown(
             format!("[main] : Failed to enable raw terminal mode: {err:#?}").as_str(),
             1,

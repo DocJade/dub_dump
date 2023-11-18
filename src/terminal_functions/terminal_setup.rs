@@ -27,7 +27,7 @@ pub fn terminal_setup() -> Result<(), TerminalInitialSetupError> {
     };
     //capture all terminal input. //! this disables ^c
     match terminal::enable_raw_mode() {
-        Ok(_) => {}
+        Ok(()) => {}
         Err(err) => return Err(TerminalInitialSetupError::Unknown(err.to_string())),
     };
 

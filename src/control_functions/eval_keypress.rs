@@ -17,7 +17,6 @@ use crate::{graceful_shutdown, Statistics};
 use crate::{speed_down, speed_reset, speed_up};
 use crate::{volume_down, volume_up};
 use std::ops::Index;
-use std::time::Duration;
 
 #[allow(clippy::pedantic)] // shut up about the line count, i know, ill fix it later
 pub fn eval_keypress(
@@ -151,7 +150,7 @@ pub fn eval_keypress(
                 debug_log!("calculating file length...");
                 let time_change = get_runtime(vec![new_file_list.index(index).to_string()]);
                 // now play the new sound
-                match play_audio_file(std::path::Path::new(new_file_list.index(index)), &mut packed){
+                match play_audio_file(std::path::Path::new(new_file_list.index(index)), &packed){
                     Ok(_) => {},
                     Err(err) => graceful_shutdown(
                         format!("[eval_keypress] : error playing new file after deleting!: {err:#?}").as_str(),

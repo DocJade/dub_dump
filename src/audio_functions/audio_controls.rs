@@ -30,13 +30,13 @@ pub fn toggle_play(packed: &PackagedSink) {
     }
 }
 
-pub fn best_space(mut packed: PackagedSink, current_file: &str) -> PackagedSink {
+pub fn best_space(packed: PackagedSink, current_file: &str) -> PackagedSink {
     // test if the sound buffer is empty
     if packed.sink.empty() {
         debug_log!("No file playing, replaying...");
         // out of sounds! replay the current file
-        match play_audio_file(std::path::Path::new(&current_file), &mut packed) {
-            Ok(_) => {}
+        match play_audio_file(std::path::Path::new(&current_file), &packed) {
+            Ok(()) => {}
             Err(err) => graceful_shutdown(
                 format!("[best_space] : could not replay file! {err:?}").as_str(),
                 1,
@@ -88,7 +88,7 @@ pub fn speed_reset(packed: &PackagedSink) {
 
 #[must_use]
 pub fn skip(
-    mut packed: PackagedSink,
+    packed: PackagedSink,
     file_list: Vec<String>,
     index: usize,
     stats: Statistics
@@ -115,9 +115,9 @@ pub fn skip(
     debug_log!("Playing new sound...");
     match play_audio_file(
         std::path::Path::new(file_list.index(new_index)),
-        &mut packed,
+        &packed,
     ) {
-        Ok(_) => {}
+        Ok(()) => {}
         Err(err) => graceful_shutdown(format!("[skip] : could not play file! {err:?}").as_str(), 1),
     }
     // file is playing! return values.
@@ -126,7 +126,7 @@ pub fn skip(
 
 #[must_use]
 pub fn skip_back(
-    mut packed: PackagedSink,
+    packed: PackagedSink,
     file_list: Vec<String>,
     index: usize,
     stats: Statistics,
@@ -154,9 +154,9 @@ pub fn skip_back(
     debug_log!("Playing new sound...");
     match play_audio_file(
         std::path::Path::new(file_list.index(new_index)),
-        &mut packed,
+        &packed,
     ) {
-        Ok(_) => {}
+        Ok(()) => {}
         Err(err) => graceful_shutdown(format!("[skip] : could not play file! {err:?}").as_str(), 1),
     }
     // file is playing! return values.

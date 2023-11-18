@@ -1,7 +1,12 @@
 {
     "rust-analyzer.showUnlinkedFileNotification": false,
     "cSpell.words": [
+        "brudda",
+        "codegen",
         "crossterm",
-        "readline"
+        "Deserializers",
+        "keybinds",
+        "readline",
+        "rodio"
     ]
 }

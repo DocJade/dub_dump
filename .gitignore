@@ -1,4 +1,5 @@
 /target
 test.wav
 loggy.log
-/.vscode
+.vscode
+.vscode/settings.json

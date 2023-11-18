@@ -20,8 +20,8 @@ pub fn get_dir() -> String {
         // we cannot readline in raw mode, need to switch.
 
         match terminal::disable_raw_mode() {
-            Ok(_) => {}
-            Err(_) => graceful_shutdown("[get_dir] Unable to disable raw mode!", 1),
+            Ok(()) => {}
+            Err(err) => graceful_shutdown(&format!("[get_dir] Unable to disable raw mode! {err}"), 1),
         };
 
         let _ = stdout().flush();
@@ -40,13 +40,13 @@ pub fn get_dir() -> String {
 
         if Path::new(&s).is_dir() {
             // thats a directory!
-            // we dont care if theres actually audio in there,
+            // we don't care if theres actually audio in there,
             // why would someone enter a dir with no audio?
 
             //re-enable raw mode
             match terminal::enable_raw_mode() {
-                Ok(_) => {}
-                Err(_) => graceful_shutdown("[get_dir] Unable to re-enable raw mode!", 1),
+                Ok(()) => {}
+                Err(err) => graceful_shutdown(&format!("[get_dir] Unable to re-enable raw mode! {err}"), 1),
             };
 
             return s;

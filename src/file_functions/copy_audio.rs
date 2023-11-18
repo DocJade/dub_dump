@@ -42,7 +42,7 @@ pub fn copy_audio(master: String) -> String {
     let new: String = format!("{up_path}\\Dub_dump\\");
 
     match create_dir(&new) {
-        Ok(_) => {}
+        Ok(()) => {}
         Err(err) => graceful_shutdown(
             format!("[copy_audio] : error creating new folder: {err:#?}").as_str(),
             1,

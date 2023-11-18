@@ -5,7 +5,7 @@ use log4rs::config::Deserializers;
 /// Will panic if the logger is unable to start, but this only runs on debug builds.
 pub fn setup_logging() {
     match log4rs::init_file("log4rs.yml", Deserializers::default()) {
-        Ok(_) => {}
+        Ok(()) => {}
         Err(err) => panic!("Unable to start logger! : {err}"),
     };
 }
@@ -13,7 +13,7 @@ pub fn setup_logging() {
 #[test]
 fn test_log_config() {
     match log4rs::init_file("log4rs.yml", Deserializers::default()) {
-        Ok(_) => {}
+        Ok(()) => {}
         Err(err) => panic!("Unable to start logger! : {err}"),
     };
 }

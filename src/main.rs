@@ -10,7 +10,7 @@
 // delete undo
 // track audio length inside of file list to never recalculate the file lengths more than once.
 // fix cognitive complexity on functions by breaking them up more.
-// pause core loop when no keypresses are happening
+// pause core loop when no key presses are happening
 
 // figure out why i cannot print to col 80
 
@@ -52,14 +52,11 @@ pub mod helper_functions;
 pub mod sorting_functions;
 pub mod terminal_functions;
 
-use std::time::Duration;
-
 use crate::helper_functions::get_runtime::get_runtime;
 use crate::terminal_functions::draw_non_static::draw_non_static;
 use crate::update_statistics::update_statistics;
 
 use control_functions::eval_keypress::eval_keypress;
-use crossterm::event::poll;
 use file_functions::copy_audio::copy_audio;
 use file_functions::get_file_list::get_file_list;
 use helper_functions::setup_logging::setup_logging;
@@ -114,7 +111,7 @@ fn main() {
     // do terminal setup
 
     match terminal_setup() {
-        Ok(_) => {
+        Ok(()) => {
             debug_log!("Terminal ready!");
         }
         Err(err) => graceful_shutdown(
@@ -198,7 +195,7 @@ fn main() {
     // now we shall enter the main loop
     debug_log!("Entering main loop!");
     loop {
-        // listen and act on keypresses
+        // listen and act on key presses
         // this will also update statistics
 
         // eval keypress also blocks until the a key is received.
@@ -246,5 +243,5 @@ fn no_empty_splashes() {
 fn no_newline_at_end_of_splashes() {
     // make sure there isn't a newline at the end of the splash file
     let splashes = include_bytes!("splashes.txt");
-    assert_ne!(splashes.last(), Some(&b'\n')); // make sure it isnt empty
+    assert_ne!(splashes.last(), Some(&b'\n')); // make sure it isn't empty
 }

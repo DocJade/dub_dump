@@ -2,13 +2,15 @@
 Dub Dump is a tool for quickly reviewing and discarding audio clips
 
 # Usage
-Launch the app, it will ask for a directory.
+Launch the app, and it will ask for a directory.
 
-Once you provide it a directory full of audio files, it will clone the directory one step up (ie `c:\Voiceover Audio` will be cloned into `c:\Dub Dump`).
+The audio files you provide need to be numbered at the end, such as `file001` or `file-001`, as long as it ends with numbers, it should work.
+
+Once you provide it with a directory full of audio files, it will clone the directory one step up (ie `c:\Voiceover Audio` will be cloned into `c:\Dub Dump`).
 
 Right now, the directory cloning does not check to see if there is already a copy of the files, and the app will crash if there is, so you need to delete the old `Dub Dump` folder before running again on the same directory.
 
-Once all the audio has been cloned, the app will take a moment to index the audio, then it will drop you into the main screen.
+Once all the audio has been cloned, the app will take a moment to index the audio, and then it will drop you into the main screen.
 
 On the main screen, controls are shown at the bottom.
 

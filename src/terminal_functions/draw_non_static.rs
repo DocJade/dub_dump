@@ -36,8 +36,9 @@ pub fn draw_non_static(stats: &Statistics, current_index: usize) {
     // now calculate our progress
     let mut total_progress_percentage: f64;
     let current_float_index: f64 = current_index as f64;
-    total_progress_percentage = (stats.dumped_clips as i64 - stats.total_clips as i64) as f64;
+    total_progress_percentage = (stats.dumped_clips - stats.total_clips) as f64;
     total_progress_percentage = current_float_index / total_progress_percentage;
+    total_progress_percentage *= -1.0;
 
     #[allow(clippy::cast_possible_truncation)] // there is not any resonable scenario where this would be an issue
     #[allow(clippy::cast_sign_loss)] // dealing with positive numbers only anyways.

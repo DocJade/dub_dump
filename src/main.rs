@@ -10,6 +10,7 @@
 // delete undo
 // track audio length inside of file list to never recalculate the file lengths more than once.
 // fix cognitive complexity on functions by breaking them up more.
+// pause core loop when no keypresses are happening
 
 // figure out why i cannot print to col 80
 
@@ -77,15 +78,15 @@ use crate::terminal_functions::terminal_setup::terminal_setup;
 
 //Constants
 
-const VERSION_STRING: &str = "Version 0.0.0 Nov 16 2022";
+const VERSION_STRING: &str = "Version 0.0.0 Nov 18 2022";
 
 // struct for statistics
 
 // all time stats are in seconds
 #[derive(Debug)]
 pub struct Statistics {
-    total_clips: usize,  // total clips ever imported this session
-    dumped_clips: usize, // total deleted clips
+    total_clips: i64,  // total clips ever imported this session
+    dumped_clips: i64, // total deleted clips
     cut_ratio: f64, // ratio of kept to thrown away, throwing away none is 0, all is 1 (cut/total)
     old_run_time: f64, // original runtime of all the files
     new_run_time: f64, // current run time of all files
@@ -163,12 +164,14 @@ fn main() {
 
     debug_log!("Calculating initial statistics...");
     println!("Calculating audio length, this may take a while...");
+    let very_inital_runtime = get_runtime(file_list.clone());
     statistics = update_statistics(
         statistics,
-        file_list.len(),
+        #[allow(clippy::unwrap_used)] // we arent going to have enough clips to ever have an issue saturating a i64 or usize
+        file_list.len().try_into().unwrap(), 
         0,
-        get_runtime(file_list.clone()),
-        0.0,
+        very_inital_runtime,
+        very_inital_runtime
     );
     debug_log!("Done!");
 
@@ -193,7 +196,9 @@ fn main() {
     debug_log!("Entering main loop!");
     loop {
         // listen and act on keypresses
-        (packed, file_list, list_index) = eval_keypress(packed, file_list, list_index);
+        // this will also update statistics
+        (packed, file_list, list_index, statistics) = eval_keypress(packed, file_list, list_index, statistics);
+        // update dynamic elements
         draw_non_static(&statistics, list_index);
     }
 }

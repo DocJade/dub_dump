@@ -15,8 +15,8 @@ use crate::Statistics;
 #[allow(clippy::pedantic)] // dont care about the FP precision lost
 pub fn update_statistics(
     old_stats: Statistics,
-    total_change: usize,
-    dumped_change: usize,
+    total_change: i64,
+    dumped_change: i64,
     old_runtime_change: f64,
     new_runtime_change: f64,
 ) -> Statistics {
@@ -30,8 +30,7 @@ pub fn update_statistics(
     // calculate the new cut ratio and time saved
     // precision errors? i hardly knew her
     new_stats.cut_ratio = new_stats.dumped_clips as f64 / new_stats.total_clips as f64;
-    new_stats.time_saved =
-        new_stats.old_run_time - (new_stats.old_run_time - new_stats.new_run_time);
+    new_stats.time_saved = new_stats.old_run_time - new_stats.new_run_time;
 
     new_stats
 }

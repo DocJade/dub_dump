@@ -2,7 +2,7 @@
 
 use std::ops::Index;
 
-use crate::helper_functions::graceful_shutdown::graceful_shutdown;
+use crate::{helper_functions::graceful_shutdown::graceful_shutdown, Statistics};
 
 use super::{create_sink::PackagedSink, play_audio_file::play_audio_file};
 
@@ -91,13 +91,14 @@ pub fn skip(
     mut packed: PackagedSink,
     file_list: Vec<String>,
     index: usize,
-) -> (PackagedSink, Vec<String>, usize) {
+    stats: Statistics
+) -> (PackagedSink, Vec<String>, usize, Statistics) {
     // make sure we can actually skip
 
     if index + 1 > file_list.len() {
         // too far!
         debug_log!("Tried to skip, but hit end of vec.");
-        return (packed, file_list, index);
+        return (packed, file_list, index, stats);
     }
 
     // we're good!
@@ -120,7 +121,7 @@ pub fn skip(
         Err(err) => graceful_shutdown(format!("[skip] : could not play file! {err:?}").as_str(), 1),
     }
     // file is playing! return values.
-    (packed, file_list, new_index)
+    (packed, file_list, new_index, stats)
 }
 
 #[must_use]
@@ -128,13 +129,15 @@ pub fn skip_back(
     mut packed: PackagedSink,
     file_list: Vec<String>,
     index: usize,
-) -> (PackagedSink, Vec<String>, usize) {
+    stats: Statistics,
+) -> (PackagedSink, Vec<String>, usize, Statistics) {
     // make sure we can actually skip
 
     if index == 0 {
         // too far!
         debug_log!("Tried to skip, but hit beginning of vec.");
-        return (packed, file_list, index);
+        
+        return (packed, file_list, index, stats);
     }
 
     // we're good!
@@ -157,5 +160,5 @@ pub fn skip_back(
         Err(err) => graceful_shutdown(format!("[skip] : could not play file! {err:?}").as_str(), 1),
     }
     // file is playing! return values.
-    (packed, file_list, new_index)
+    (packed, file_list, new_index, stats)
 }

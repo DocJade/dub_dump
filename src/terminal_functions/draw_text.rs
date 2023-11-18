@@ -38,7 +38,7 @@ pub fn easy_draw_text(string: String, pos_x: u16, pos_y: u16) {
     }) {
         Ok(_) => {}
         Err(err) => crate::helper_functions::graceful_shutdown::graceful_shutdown(
-            &format!("[MACRO][easy_draw_text] : Issue drawing {:#?}", err),
+            &format!("[MACRO][easy_draw_text] : Issue drawing {err:#?}"),
             1,
         ),
     }

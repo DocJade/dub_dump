@@ -8,6 +8,7 @@ use crate::helper_functions::graceful_shutdown::graceful_shutdown;
 // rewrite this, why cannot i get the file length directly?
 
 // take in a list of files and calculate the total runtime in seconds in F64
+#[must_use]
 pub fn get_runtime(files: Vec<String>) -> f64 {
     debug_log!("Calculating runtime...");
 
@@ -71,7 +72,7 @@ pub fn get_runtime(files: Vec<String>) -> f64 {
         // calculate sound length in seconds
 
         let samples = decoder1.count();
-        let length = (samples as f64 / sample_rate as f64);
+        let length = samples as f64 / f64::from(sample_rate);
         // debug_log!("File:{}, Length:{}s", file, length);
         // get length
         total += length;

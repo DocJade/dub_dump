@@ -4,7 +4,7 @@ use std::io::Write;
 
 use crate::Statistics;
 
-use super::draw_text::{self, easy_draw_text, PrintableText};
+use super::draw_text::easy_draw_text;
 
 pub fn draw_non_static(stats: &Statistics, current_index: usize) {
     // first up, draw the statistics
@@ -38,9 +38,9 @@ pub fn draw_non_static(stats: &Statistics, current_index: usize) {
     total_progress_percentage = (stats.dumped_clips as i64 - stats.total_clips as i64) as f64;
     total_progress_percentage = current_float_index / total_progress_percentage;
 
-    let pop_amount: u16 = (79 as f64 * total_progress_percentage).floor() as u16;
+    let pop_amount: u16 = (79_f64 * total_progress_percentage).floor() as u16;
     // pop off the dots
-    for _ in 0..pop_amount + 1 {
+    for _ in 0..=pop_amount {
         _ = total_progress_bar.pop();
     }
     // add the vert line

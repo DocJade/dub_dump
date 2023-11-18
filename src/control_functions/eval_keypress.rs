@@ -143,6 +143,11 @@ pub fn eval_keypress(
             } => {
                 debug_log!("d pressed, deleting sound.");
                 let new_file_list = delete_file(file_list, index);
+                // stop playing the old sound
+
+                debug_log!("[skip] : Stopping previous sound...");
+                crate::audio_functions::audio_controls::stop(&packed);
+            
                 debug_log!("calculating file length...");
                 let time_change = get_runtime(vec![new_file_list.index(index).to_string()]);
                 // now play the new sound

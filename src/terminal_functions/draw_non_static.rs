@@ -58,4 +58,5 @@ pub fn draw_non_static(stats: &Statistics, current_index: usize) {
     // flush to make sure we clear then print
     _ = std::io::stdout().flush();
     easy_draw_text(total_progress_bar, 0, 8);
+    _ = std::io::stdout().flush();
 }

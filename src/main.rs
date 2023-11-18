@@ -52,11 +52,14 @@ pub mod helper_functions;
 pub mod sorting_functions;
 pub mod terminal_functions;
 
+use std::time::Duration;
+
 use crate::helper_functions::get_runtime::get_runtime;
 use crate::terminal_functions::draw_non_static::draw_non_static;
 use crate::update_statistics::update_statistics;
 
 use control_functions::eval_keypress::eval_keypress;
+use crossterm::event::poll;
 use file_functions::copy_audio::copy_audio;
 use file_functions::get_file_list::get_file_list;
 use helper_functions::setup_logging::setup_logging;
@@ -164,21 +167,21 @@ fn main() {
 
     debug_log!("Calculating initial statistics...");
     println!("Calculating audio length, this may take a while...");
-    let very_inital_runtime = get_runtime(file_list.clone());
+    let very_initial_runtime = get_runtime(file_list.clone());
     statistics = update_statistics(
         statistics,
-        #[allow(clippy::unwrap_used)] // we arent going to have enough clips to ever have an issue saturating a i64 or usize
+        #[allow(clippy::unwrap_used)] // we aren't going to have enough clips to ever have an issue saturating a i64 or usize
         file_list.len().try_into().unwrap(), 
         0,
-        very_inital_runtime,
-        very_inital_runtime
+        very_initial_runtime,
+        very_initial_runtime
     );
     debug_log!("Done!");
 
     // check terminal size
 
     match set_size() {
-        Ok(_) => {}
+        Ok(()) => {}
         Err(err) => graceful_shutdown(
             format!("[main] : error with terminal sizing: {err:#?}").as_str(),
             1,
@@ -197,6 +200,8 @@ fn main() {
     loop {
         // listen and act on keypresses
         // this will also update statistics
+
+        // eval keypress also blocks until the a key is received.
         (packed, file_list, list_index, statistics) = eval_keypress(packed, file_list, list_index, statistics);
         // update dynamic elements
         draw_non_static(&statistics, list_index);
@@ -206,9 +211,9 @@ fn main() {
 // tests
 #[test]
 fn have_splashes_test() {
-    // check to make sure splashes.txt isnt empty
+    // check to make sure splashes.txt isn't empty
     let splashes = include_bytes!("splashes.txt");
-    assert!(!splashes.is_empty()); // make sure it isnt empty
+    assert!(!splashes.is_empty()); // make sure it isn't empty
 }
 
 #[test]
@@ -239,7 +244,7 @@ fn no_empty_splashes() {
 
 #[test]
 fn no_newline_at_end_of_splashes() {
-    // make sure there isnt a newline at the end of the splash file
+    // make sure there isn't a newline at the end of the splash file
     let splashes = include_bytes!("splashes.txt");
     assert_ne!(splashes.last(), Some(&b'\n')); // make sure it isnt empty
 }

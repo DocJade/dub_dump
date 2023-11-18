@@ -11,7 +11,11 @@ pub fn draw_non_static(stats: &Statistics, current_index: usize) {
     // first up, draw the statistics
     easy_draw_text(format!("{: >5}", stats.total_clips.to_string()), 74, 1);
     easy_draw_text(format!("{: >5}", stats.dumped_clips.to_string()), 74, 2);
-    easy_draw_text(format!("{: >5}", stats.cut_ratio.to_string()), 74, 3);
+    // a little extra work for the cut percentage
+    // round it 
+    let percent_round = (stats.cut_ratio * 100.0).round() / 100.0;
+    let cut_percent = format!("{percent_round:.2}");
+    easy_draw_text(format!("{cut_percent: >5}"), 74, 3);
     easy_draw_text(
         format!("{: >5}", stats.old_run_time.round().to_string()),
         74,

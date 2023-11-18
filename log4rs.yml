@@ -12,6 +12,11 @@ appenders:
 
 # Set the default logging level to "warn" and attach the "stdout" appender to the root
 root:
-  level: debug
-  appenders:
-    - loggy
+  level: off
+  appenders: [console]
+
+loggers:
+  dub_dump:
+    level: debug
+    appenders:
+      - loggy

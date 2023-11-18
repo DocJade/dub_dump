@@ -2,7 +2,7 @@
 //    00000000001111111111222222222233333333334444444444555555555566666666667777777777
 //    01234567890123456789012345678901234567890123456789012345678901234567890123456789
 
-//00         .____        _      .____                          |     Statistics:    
+//00         .____        _      .____                          |     Statistics:
 //01         |    \  _ _ | [_    |    \  _ _  _____ .___        | Total clips:  12345
 //02         |  |  || | || . |   |  |  || | || , , || . |       | Dumped clips: 12345
 //03         |____/ |___||___|   |____/ |___||_|_|_||  _|       | Cut ratio:    .0985 // logo is horizontally centered in its box
@@ -10,12 +10,11 @@
 //05   -----space for version text----------------------------- | New run time: 0.00H
 //06   -----MOTD---------------56-chars-of-space--------------- | Time saved:   0.00H
 //07  ----------------------------------------------------------+-------------------- // divider
-//08   --total-directory-progress-bar--------------------------------------------000% // style is 1234 ##|'.'.'. 1234 //.'.' might change
+//08   --total-directory-progress-bar--------------------------------------------000% // style is 1234 ##|'.'.'. 1234 //.'.' might change // index/total
 //09  ------------------------------------------------------------------------------- // divider
 //11  ###############################################################################
 //12  ############################################################################### // extra space? what goes here?
 //13  ############################################################################### // i could also reduce the app hight
-//14  ###############################################################################
 //15                                                                                  // gap
 //16             .                     .:####.                                        // audio clip waveform
 //17          .:|#.                 .:|#######.                                       // audio clip waveform
@@ -25,8 +24,9 @@
 //21          ':|#'                 ':|#######'                                       // audio clip waveform
 //22             '                     :|####'                                        // audio clip waveform
 //23                                                                                  // gap
-//24   --clip-progress-bar----------------------------------------------------------- // style is 0m00s -|----- 0m00s
+//24  --clip-progress-bar------------------------------------------------------------  // style is 0m00s -|----- 0m00s
 //23                                                                                  // gap
+//24  Volume: ???%     Speed: ???%                                                    // Volume and speed indicators
 //25  ------------------------------------------------------------------------------- // divider
 //26  ############################################################################### // timeline view, shows relative clip lengths to eachother, current clip in middle
 //27  ------------------------------------------------------------------------------- // divider
@@ -143,8 +143,10 @@ fn draw_controls() {
     // draw controls
     // this function is haunted
     let statistics_lines: Vec<String> = vec![
-        "space: replay    a: back    s: skip    d: dump    x: reset speed    ^c: exit   ".to_string(),
-        "up/down: volume     left/right: speed                                 [DocJade]".to_string(),
+        "space: replay    a: back    s: skip    d: dump    x: reset speed    ^c: exit   "
+            .to_string(),
+        "up/down: volume     left/right: speed                                 [DocJade]"
+            .to_string(),
     ];
     for n in 0u16..2 {
         let usize_int: usize = n.into();
@@ -152,7 +154,7 @@ fn draw_controls() {
             text_color: colored::Color::White,
             message: statistics_lines.index(usize_int).to_string(),
             pos_x: 0,
-            pos_y: n+28,
+            pos_y: n + 28,
         });
         match result {
             Ok(_) => {}

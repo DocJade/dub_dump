@@ -156,7 +156,7 @@ pub fn eval_keypress(
                     _ => {
                         debug_log!("Key without command pressed, ignoring.");
                         (packed, file_list, index)
-                    },
+                    }
                 }
                 //debug_log!("[main] : keypress : {:?},{:?}\r", event.code, event.kind);
             } else {

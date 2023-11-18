@@ -20,10 +20,7 @@ pub enum FilePlayError {
 /// # Panics
 /// will panic if we see a new kind of file error
 pub fn play_audio_file(file_path: &Path, packed: &mut PackagedSink) -> Result<(), FilePlayError> {
-    debug_log!(
-        "Attempting to play: {:?}...",
-        file_path.to_str()
-    );
+    debug_log!("Attempting to play: {:?}...", file_path.to_str());
 
     // Open the file
     let sound: File = match File::open(file_path) {

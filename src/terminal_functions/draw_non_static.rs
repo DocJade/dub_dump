@@ -22,7 +22,7 @@ pub fn draw_non_static(stats: &Statistics, current_index: usize) {
     // now calculate our progress
     let mut total_progress_percentage: f64 = 0.0;
     let current_float_index: f64 = current_index as f64;
-    total_progress_percentage = (stats.dumped_clips - stats.total_clips) as f64;
+    total_progress_percentage = (stats.dumped_clips as i64 - stats.total_clips as i64) as f64;
     total_progress_percentage = current_float_index / total_progress_percentage;
 
     let pop_amount: u16 = (79 as f64 * total_progress_percentage).floor() as u16;

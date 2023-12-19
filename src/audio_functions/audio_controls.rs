@@ -32,6 +32,9 @@ pub fn toggle_play(packed: &PackagedSink) {
 
 pub fn best_space(packed: PackagedSink, current_file: &str) -> PackagedSink {
     // test if the sound buffer is empty
+    // next 2 lines are replay only patch
+    debug_log!("Stopping previous sound...");
+    stop(&packed);
     if packed.sink.empty() {
         debug_log!("No file playing, replaying...");
         // out of sounds! replay the current file

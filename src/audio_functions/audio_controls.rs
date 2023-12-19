@@ -43,9 +43,17 @@ pub fn best_space(packed: PackagedSink, current_file: &str) -> PackagedSink {
             ),
         };
     } else {
+        // This i dont want pause playing anymore, you can reenable it here.
         // buffer is not empty
-        debug_log!("Buffer is not empty, toggling...");
-        toggle_play(&packed);
+        // debug_log!("Buffer is not empty, toggling...");
+        // toggle_play(&packed);
+        match play_audio_file(std::path::Path::new(&current_file), &packed) {
+            Ok(()) => {}
+            Err(err) => graceful_shutdown(
+                format!("[best_space] : could not replay file! {err:?}").as_str(),
+                1,
+            ),
+        };
     }
     packed
 }

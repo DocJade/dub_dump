@@ -1,3 +1,6 @@
+Archived 8/30/2024, using this was fun, but ultimately it was easier to do audio review within my NLE, since I had to splice clips together quite often.
+
+
 # dub_dump
 Dub Dump is a tool for quickly reviewing and discarding audio clips
 
